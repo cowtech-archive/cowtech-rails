@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cowtech-rails}
-  s.version = "1.0.0.0"
+  s.version = "1.1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shogun"]
@@ -16,18 +16,16 @@ Gem::Specification.new do |s|
     "README"
   ]
   s.files = [
-    "app/helpers/cowtech/application_helper.rb",
-    "app/helpers/cowtech/crud_helper.rb",
-    "app/helpers/cowtech/format_helper.rb",
-    "app/helpers/cowtech/validation_helper.rb",
-    "app/models/e_mail.rb",
-    "app/models/model_base.rb",
-    "config/initializers/extensions.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/application_helper.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/crud_helper.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/format_helper.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/validation_helper.rb",
+    "app/models/cowtech/ruby_on_rails/models/e_mail.rb",
+    "app/models/cowtech/ruby_on_rails/models/model_base.rb",
     "lib/cowtech.rb",
-    "lib/engine.rb",
-    "lib/extensions.rb",
-    "lib/monkey_patches.rb",
-    "lib/version.rb",
+    "lib/cowtech/extensions.rb",
+    "lib/cowtech/monkey_patches.rb",
+    "lib/cowtech/version.rb",
     "rails/init.rb"
   ]
   s.homepage = %q{http://github.com/ShogunPanda/cowtech-rails}
