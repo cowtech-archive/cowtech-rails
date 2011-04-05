@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'jeweler'
-require "./lib/version.rb"
+require "./lib/cowtech/version.rb"
 
 Jeweler::Tasks.new do |gem|
   gem.name = "cowtech-rails"
