@@ -14,4 +14,4 @@ Jeweler::Tasks.new do |gem|
   gem.files = Dir["{lib}/**/*", "{app}/**/*", "{config}/**/*", "{rails}/**/*"]
 end
 
-#Jeweler::RubygemsDotOrgTasks.new
+Jeweler::RubygemsDotOrgTasks.new
