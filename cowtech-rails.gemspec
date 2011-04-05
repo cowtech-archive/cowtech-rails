@@ -9,22 +9,24 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shogun"]
-  s.date = %q{2011-04-04}
+  s.date = %q{2011-04-05}
   s.description = %q{A general purpose Rails utility plugin.}
   s.email = %q{shogun_panda@me.com}
   s.extra_rdoc_files = [
     "README"
   ]
   s.files = [
-    "app/helpers/application_helper.rb",
-    "app/helpers/c_r_u_d_helper.rb",
-    "app/helpers/format_helper.rb",
-    "app/helpers/validation_helper.rb",
+    "app/helpers/cowtech/application_helper.rb",
+    "app/helpers/cowtech/crud_helper.rb",
+    "app/helpers/cowtech/format_helper.rb",
+    "app/helpers/cowtech/validation_helper.rb",
     "app/models/e_mail.rb",
     "app/models/model_base.rb",
+    "config/initializers/extensions.rb",
     "lib/cowtech.rb",
     "lib/engine.rb",
     "lib/extensions.rb",
+    "lib/monkey_patches.rb",
     "lib/version.rb",
     "rails/init.rb"
   ]
