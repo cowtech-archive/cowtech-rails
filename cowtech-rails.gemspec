@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cowtech-rails}
-  s.version = "1.1.0.0"
+  s.version = "1.1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shogun"]
-  s.date = %q{2011-04-05}
+  s.date = %q{2011-04-06}
   s.description = %q{A general purpose Rails utility plugin.}
   s.email = %q{shogun_panda@me.com}
   s.extra_rdoc_files = [
