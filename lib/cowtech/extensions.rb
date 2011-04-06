@@ -43,13 +43,7 @@ module Cowtech
         end
   
         def to_boolean
-          if self.is_a?(TrueClass) then
-            true
-          elsif self.is_a?(FalseClass) || self.is_a?(NilClass) then
-            false
-          else
-            self.is_valid_boolean? ? (/^(1|on|true|yes|t|y)$/i.match(self.to_s.strip) != nil) : false
-          end
+          (self.is_a?(TrueClass) || /^(1|on|true|yes|t|y)$/i.match(self.to_s.strip)) ? true : false
         end
   
         def round_to_precision(prec = 2)
