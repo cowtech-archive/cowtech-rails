@@ -43,8 +43,10 @@ module Cowtech
         end
   
         def to_boolean
-          if self.is_a?(TrueClass) || self.is_a?(FalseClass) || self.is_a?(NilClass) then
-            self
+          if self.is_a?(TrueClass) then
+            true
+          elsif self.is_a?(FalseClass) || self.is_a?(NilClass) then
+            false
           else
             self.is_valid_boolean? ? (/^(1|on|true|yes|t|y)$/i.match(self.to_s.strip) != nil) : false
           end
