@@ -8,6 +8,10 @@ module Cowtech
   module RubyOnRails
     module Models
       class ModelBase < ::ActiveRecord::Base
+        def safe_id
+          if self.id then self.id else 0 end
+        end
+        
         def editable?(user = nil)
           true
         end
