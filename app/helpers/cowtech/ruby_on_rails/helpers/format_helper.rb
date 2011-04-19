@@ -8,33 +8,6 @@ module Cowtech
   module RubyOnRails
     module Helpers
       module FormatHelper
-        def browser
-          unless @browser then
-            rv = OpenStruct.new({:engine => :other, :version => 1.0})
-
-            unless request.env['HTTP_USER_AGENT'].blank? then
-              ua = request.env['HTTP_USER_AGENT'].downcase
-
-              if ua.index('msie') and !ua.index('opera') and !ua.index('webtv') then
-                rv.engine = :msie
-                rv.version = /.+msie ([0-9\.]+).+/.match(ua)[1].to_f
-              elsif ua.index('gecko/') or ua.index("mozilla/")
-                rv.engine = :gecko
-              elsif ua.index('opera')
-                rv.engine = :opera
-              elsif ua.index('konqueror') 
-                rv.engine = :konqueror
-              elsif ua.index('webkit/')
-                rv.engine = :webkit
-              end
-            end
-
-            @browser = rv
-          end
-
-          @browser
-        end
-
         def format_field(field, default = nil)
           if field.is_a?(Fixnum) then
             field

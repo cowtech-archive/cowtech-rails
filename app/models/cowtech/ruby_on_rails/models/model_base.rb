@@ -20,6 +20,7 @@ module Cowtech
           true
         end
   
+        # TODO: Internationalize this. :eliminato => :deleted, :stato => :status, Stato => Status
         def delete(definitive = false)
           unless definitive then
             if self.deletable? then
