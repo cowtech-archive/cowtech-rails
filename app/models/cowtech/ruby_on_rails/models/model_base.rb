@@ -35,11 +35,11 @@ module Cowtech
         def delete(definitive = false)
           if !definitive then
             if self.deletable? then
-              if self.has_attribute?(self.deleted_column) then
-                self.update_attribute(self.deleted_column, true)
+              if self.has_attribute?(self.class.deleted_column) then
+                self.update_attribute(self.class.deleted_column, true)
                 true
-              elsif self.has_attribute?(self.status_column) then
-                self.update_attribute(self.status_column, self.deleted_status)
+              elsif self.has_attribute?(self.class.status_column) then
+                self.update_attribute(self.class.status_column, self.deleted_status)
                 true
               else
                 super()
