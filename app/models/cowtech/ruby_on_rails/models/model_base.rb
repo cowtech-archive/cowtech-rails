@@ -21,7 +21,7 @@ module Cowtech
         end
         
         def self.[](what, only_id = false)
-          self.__finalize(self.__custom_find(what), only_id) 
+          self.__finalize(self.__index_find(what), only_id) 
         end
         
         def safe_id
@@ -57,8 +57,8 @@ module Cowtech
         end
         
         def ==(other)
-          if other.class.to_s != self.class.to_s then
-            self.id == self.class.__custom_find(other).id
+          if other && other.class.to_s != self.class.to_s then
+            self.id == self.class.__index_find(other).id
           else
             super
           end
@@ -69,7 +69,7 @@ module Cowtech
         end
         
         private
-          def self.__custom_find(what)
+          def self.__index_find(what)
             self.find(what)
           end
           
