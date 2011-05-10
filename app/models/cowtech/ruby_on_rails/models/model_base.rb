@@ -21,7 +21,7 @@ module Cowtech
         end
         
         def self.[](what, only_id = false)
-          self.__finalize_record(self.__index_find(what), only_id) 
+          self.__finalize(self.__index_find(what), only_id) 
         end
         
         def safe_id
