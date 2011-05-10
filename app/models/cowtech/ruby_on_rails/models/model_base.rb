@@ -74,7 +74,11 @@ module Cowtech
           end
           
           def self.__finalize(record, only_id = false)
-            only_id ? record.id : record
+            if record then
+              only_id ? record.id : record
+            else
+              nil
+            end
           end          
       end
     end
