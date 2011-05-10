@@ -56,18 +56,10 @@ module Cowtech
           end
         end
         
-        def ==(other)
-          if other && other.class.to_s != self.class.to_s then
-            self.id == self.class.__index_find(other).id
-          else
-            super
-          end
+        def is?(other)
+          other ? (self.id == self.class.__index_find(other).id) : false
         end
 
-        def !=(other)
-          ! (self == other)
-        end
-        
         private
           def self.__index_find(what)
             self.find(what)
