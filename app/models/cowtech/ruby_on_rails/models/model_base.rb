@@ -20,27 +20,8 @@ module Cowtech
           true
         end
   
-        # TODO: Internationalize this. :eliminato => :deleted, :stato => :status, Stato => Status
         def delete(definitive = false)
-          unless definitive then
-            if self.deletable? then
-              if self.respond_to?(:eliminato) then
-                self.eliminato = true
-                self.save
-                true
-              elsif self.respond_to?(:stato) then
-                self.stato = Stato[:eliminato]
-                self.save
-                true
-              else
-                super()
-              end
-            else
-              false
-            end
-          else
-            super(definitive)
-          end
+          super()
         end
       end
     end

@@ -45,11 +45,6 @@ module Cowtech
           data[:pager_data]
         end
 
-        def crud_get_form_data(data = nil)
-          # TODO: EH?
-          @record
-        end
-
         def crud_get_data_bounds(data = nil)
           data = self.crud_get_data unless data
           data[:data_bounds]
@@ -253,10 +248,7 @@ module Cowtech
         end
 
         def crud_update_params
-          # TODO: Come fai a backuppare alcuni elementi?
-          @agenda_update = params[:agenda_update]
-          blacklist = ["controller", "action", "id", "agenda_update"]
-          blacklist << "tipo" if self.class.name != "OrdiniController"
+          blacklist = ["controller", "action", "id"]
           session["params-#{self.location_name}"] = (params.delete_if {|k,v| blacklist.include?(k) || params[k].is_a?(Tempfile)})
         end
 
