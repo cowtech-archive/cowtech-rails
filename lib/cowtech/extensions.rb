@@ -62,7 +62,7 @@ module Cowtech
         end
 
         def format_boolean
-          self.to_boolean ? "Sì" : "No"
+          self.to_boolean ? "Yes" : "No"
         end
   
         def dump
@@ -204,11 +204,11 @@ module Cowtech
           format = self.class.custom_format($1) if format =~ /^custom::(.+)/    
           unlocal = self.strftime(format || self.class.custom_format("update"))
     
-          # SCAMBIAMO I MESI E I GIORNI COMPLETI
+          # CHANGE LONG DAYS AND MONTHS
           unlocal.gsub!(/(#{self.class.localized_months.keys.join("|")})/i) do |s| self.class.localized_months[$1] end
           unlocal.gsub!(/(#{self.class.localized_days.keys.join("|")})/i) do |s| self.class.localized_days[$1] end
 
-          # SCAMBIAMO I MESI E I GIORNI CORTI
+          # CHANGE SHORT DAYS AND MONTHS
           unlocal.gsub!(/(#{self.class.localized_short_months.keys.join("|")})/i) do |s| self.class.localized_short_months[$1] end
           unlocal.gsub!(/(#{self.class.localized_short_days.keys.join("|")})/i) do |s| self.class.localized_short_days[$1] end
 

@@ -107,7 +107,7 @@ module Cowtech
           search = "(@#{search}@)"
           search.gsub!(/(\s+(AND|OR|NOT)\s+)/, "@) \\1 (@")
 
-          # SOSTITUIAMO I PARAMETRI
+          # SUBSTITUTE PARAMETERS
           i = -1
           parameters = {}
           search.gsub!(/@(.+?)@/) do |s|
@@ -116,7 +116,7 @@ module Cowtech
             key = "search_parameter_#{i}".to_sym
             val = $1
 
-            # GESTIAMO I MARCATORI DI INIZIO E FINE RIGA
+            # HANDLE LINE MARKERS
             if val =~ /^\^.+\$$/ then
               val = "#{val.gsub(/^\^(.+)\$$/, "\\1").strip}"
             elsif val =~ /^\^/ then
@@ -144,20 +144,20 @@ module Cowtech
           self.crud_query_initialize(data) unless data[:query_initialized]
           parameter = :search unless parameter
 
-          self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.eliminato = :eliminato)", {:eliminato => false}) unless data[:skip_eliminato]
+          self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} = :deleted)", {:deleted => false}) unless data[:skip_deleted]
 
-          # OTTENIAMO LA QUERY
+          # GET QUERY
           args = params[parameter] unless args
 
           unless args.blank? then
             search, parameters = self.crud_query_parse_search(args)
 
-            # COMPONIAMO LA QUERY
+            # BUILD QUERY
             data[:query_params].merge!(parameters)
             search_query = []
             fields.each do |field| search_query << "(#{search.gsub("@FIELD@", field.to_s)})" end
 
-            # ADESSO AGGIUNGIAMO I CAMPI ADDIZIONALI
+            # ADD OPTIONAL DATA
             if externals then
               externals.each do |external|
                 external_query = ""
@@ -193,14 +193,14 @@ module Cowtech
 
         def crud_form_header(female = false)
           if self.crud_get_form_data.new_record? then 
-            "Crea nuov#{if female then "a" else "o" end}"
+            "Create new"
           else
-            "Modifica"
+            "Edit"
           end
         end
 
         def crud_form_submit_label
-          if self.crud_get_form_data.new_record? then "Inserisci" else "Modifica" end
+          if self.crud_get_form_data.new_record? then "Create" else "Edit" end
         end
 
         def crud_get_page_param(key = :page, upperbound = -1)
@@ -219,8 +219,8 @@ module Cowtech
           sf = sort_by.split("-")
           rv = OpenStruct.new({:what => mo["what"], :how => mo["how"].upcase})
 
-          # ADATTIAMO ALCUNI PARAMETRI
-          rv.what = "stato_id" if rv.what == "stato"
+          # ADAPT SOME PARAMETERS
+          rv.what = "status_id" if rv.what == "status"
 
           rv
         end
@@ -280,7 +280,7 @@ module Cowtech
 
           if record then
             if only_check then
-              record.deletable?(controller.authenticated_user)
+              record.deletable?
             else
               record.delete
             end
