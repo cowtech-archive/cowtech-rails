@@ -8,11 +8,11 @@ module Cowtech
   module RubyOnRails
     module Models
       class ModelBase < ::ActiveRecord::Base
-        def deleted_column
+        def self.deleted_column
           "deleted"
         end
         
-        def status_column
+        def self.status_column
           "status_id"
         end
         
