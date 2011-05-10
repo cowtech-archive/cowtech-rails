@@ -191,6 +191,10 @@ module Cowtech
           data[:sort_order] = sort_expression.gsub("@PLACEHOLDER@", "#{sort.what} #{sort.how}")
         end
 
+        def crud_get_form_data
+          @record
+        end
+        
         def crud_form_header(female = false)
           if self.crud_get_form_data.new_record? then 
             "Create new"
