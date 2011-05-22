@@ -5,10 +5,10 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cowtech-rails}
-  s.version = "1.7.0.1"
+  s.version = "1.7.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Shogun"]
+  s.authors = [%q{Shogun}]
   s.date = %q{2011-05-22}
   s.description = %q{A general purpose Rails utility plugin.}
   s.email = %q{shogun_panda@me.com}
@@ -30,13 +30,12 @@ Gem::Specification.new do |s|
     "rails/init.rb"
   ]
   s.homepage = %q{http://github.com/ShogunPanda/cowtech-rails}
-  s.licenses = ["MIT"]
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
+  s.licenses = [%q{MIT}]
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.3}
   s.summary = %q{A general purpose Rails utility plugin.}
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
