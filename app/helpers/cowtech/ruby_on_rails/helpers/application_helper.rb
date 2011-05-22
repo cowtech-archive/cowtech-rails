@@ -24,7 +24,7 @@ module Cowtech
             args.insert(0, "app/#{self.controller_name}.js")
             javascript_include_tag(*args)
           elsif what == :css then
-            args.insert(0, "#{self.controller_name}.css")
+            args.insert(0, "app/#{self.controller_name}.css")
             stylesheet_link_tag(*args)
           end
         end
