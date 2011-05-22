@@ -21,9 +21,11 @@ module Cowtech
 
         def additional_tag(what = :js, *args)
           if what == :js then
-            javascript_include_tag("specific/#{self.controller_name}.js", *args)
+            args.insert(0, "app/#{self.controller_name}.js")
+            javascript_include_tag(*args)
           elsif what == :css then
-            stylesheet_link_tag("#{self.controller_name}.css", *args)
+            args.insert(0, "#{self.controller_name}.css")
+            stylesheet_link_tag(*args)
           end
         end
 

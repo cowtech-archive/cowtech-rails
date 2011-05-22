@@ -2,14 +2,15 @@ require 'rubygems'
 require 'jeweler'
 require "./lib/cowtech/version.rb"
 
-begin
-  require 'psych'
-  YAML::ENGINE.yamler = 'psych'
-rescue LoadError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `gem install psych` to install missing gems"
-  exit e.status_code
-end
+#begin
+#  require 'yaml'
+#  require 'psych'
+#  YAML::ENGINE.yamler = 'psych'
+#rescue LoadError => e
+#  $stderr.puts e.message
+#  $stderr.puts "Run `gem install psych` to install missing gems"
+#  exit e.status_code
+#end
 
 Jeweler::Tasks.new do |gem|
   gem.name = "cowtech-rails"
