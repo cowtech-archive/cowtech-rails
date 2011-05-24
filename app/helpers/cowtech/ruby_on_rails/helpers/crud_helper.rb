@@ -128,7 +128,7 @@ module Cowtech
             end
 
             parameters[key] = val
-            "@FIELD@ LIKE :#{key}"
+            "#{self.crud_get_class.table_name}.@FIELD@ LIKE :#{key}"
           end
 
           [search, parameters]
