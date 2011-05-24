@@ -145,7 +145,7 @@ module Cowtech
           parameter = :search unless parameter
 
           self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} = :deleted)", {:deleted => false}) unless data[:skip_deleted]
-
+          
           # GET QUERY
           args = params[parameter] unless args
 
@@ -155,7 +155,7 @@ module Cowtech
             # BUILD QUERY
             data[:query_params].merge!(parameters)
             search_query = []
-            fields.each do |field| search_query << "(#{search.gsub("@FIELD@", field.to_s)})" end
+            fields.each do |field| search_query << "(#{search.gsub("@FIELD@", "#{self.crud_get_class(data).table_name}.#{field.to_s}")})" end
 
             # ADD OPTIONAL DATA
             if externals then
@@ -164,12 +164,12 @@ module Cowtech
     
                 unless external[:manual] then
                   external_conds = []
-                  external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", external_field.to_s)})" end
+                  external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" end
                   external_field = external.fetch(:external_field, "id")
                   external_query = "(#{external.fetch(:field, "id")} IN (SELECT #{external.fetch(:external_field, "id")} FROM #{external[:table]} WHERE #{external_conds.join(" OR ")}))" 
                 else
                   external_conds = []
-                  external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", external_field.to_s)})" end
+                  external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" end
                   external_query = external[:query].gsub("@SEARCH@", external_conds.join(" OR "))
                 end
   
