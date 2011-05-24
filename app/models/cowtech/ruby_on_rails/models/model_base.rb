@@ -21,7 +21,7 @@ module Cowtech
         end
         
         def self.[](what, only_id = false)
-          self.__finalize(self.__index_find(what), only_id) 
+          self.__finalize(self.__safe_index_find(what), only_id) 
         end
         
         def safe_id
@@ -57,7 +57,7 @@ module Cowtech
         end
         
         def is?(other)
-          other ? (self.id == self.class.__index_find(other).id) : false
+          other ? (self.id == self.class.__safe_index_find(other).id) : false
         end
 
         private
@@ -72,6 +72,18 @@ module Cowtech
               nil
             end
           end          
+          
+          def self.__safe_index_find(what)
+            record = nil
+            
+            begin
+              record = self.__index_find(what)
+            rescue ActiveRecord::RecordNotFound
+              record = nil
+            end
+          
+            record
+          end
       end
     end
   end
