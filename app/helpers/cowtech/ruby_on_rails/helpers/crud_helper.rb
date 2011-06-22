@@ -169,8 +169,15 @@ module Cowtech
                   external_query = "(#{external.fetch(:field, "id")} IN (SELECT #{external.fetch(:external_field, "id")} FROM #{external[:table]} WHERE #{external_conds.join(" OR ")}))" 
                 else
                   external_conds = []
-                  external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" end
+                  raw_external_conds = []
+
+                  external.fetch(:fields, []).each do |external_field| 
+                    external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" 
+                    raw_external_conds << "(#{search.gsub("@FIELD@", "#{external_field.to_s}")})"
+                  end
+
                   external_query = external[:query].gsub("@SEARCH@", external_conds.join(" OR "))
+                  external_query = external[:query].gsub("@RAW_SEARCH@", raw_external_conds.join(" OR "))
                 end
   
                 search_query << external_query
