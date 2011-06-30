@@ -237,43 +237,45 @@ module Math
   end
 end
 
-class ActiveRecord::Base
-  def self.table_prefix
-    p = ActiveRecord::Base.configurations[Rails.env]["table_prefix"]
-    !p.blank? ? p + "_" : ""
-  end
-
-  def self.table_suffix
-    p = ActiveRecord::Base.configurations[Rails.env]["table_suffix"]
-    !p.blank? ? p + "_" : ""
-  end
-
-  def self.set_table_name(value = nil, &block)  
-    define_attr_method :table_name, "#{ActiveRecord::Base.table_prefix}#{value}#{ActiveRecord::Base.table_suffix}", &block  
-  end
-
-  def self.find_or_create(oid, attributes = nil)
-    begin
-      self.find(oid)
-    rescue ActiveRecord::RecordNotFound
-      self.new(attributes)
+if defined?(ActiveRecord) then
+  class ActiveRecord::Base
+    def self.table_prefix
+      p = ActiveRecord::Base.configurations[Rails.env]["table_prefix"]
+      !p.blank? ? p + "_" : ""
     end
-  end
 
-  def self.safe_find(oid)
-    begin
-      rv = self.find(oid)
-    rescue ActiveRecord::RecordNotFound
-      nil
+    def self.table_suffix
+      p = ActiveRecord::Base.configurations[Rails.env]["table_suffix"]
+      !p.blank? ? p + "_" : ""
     end
-  end
 
-  def self.random
-    c = self.count
-    c != 0 ? self.find(:first, :offset => rand(c)) : nil
-  end
+    def self.set_table_name(value = nil, &block)  
+      define_attr_method :table_name, "#{ActiveRecord::Base.table_prefix}#{value}#{ActiveRecord::Base.table_suffix}", &block  
+    end
 
-  def self.per_page
-    25
+    def self.find_or_create(oid, attributes = nil)
+      begin
+        self.find(oid)
+      rescue ActiveRecord::RecordNotFound
+        self.new(attributes)
+      end
+    end
+
+    def self.safe_find(oid)
+      begin
+        rv = self.find(oid)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
+    end
+
+    def self.random
+      c = self.count
+      c != 0 ? self.find(:first, :offset => rand(c)) : nil
+    end
+
+    def self.per_page
+      25
+    end
   end
 end
