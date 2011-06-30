@@ -29,21 +29,17 @@ module Cowtech
           end
         end
 
+        def google_font_stylesheet(font)
+          tag('link', {:rel => :stylesheet, :type => Mime::CSS, :href => "http://fonts.googleapis.com/css?family=#{font}"}, false, false)
+        end
+        
         def get_data(key = nil, default = "")
-          rv = nil
-          
-          begin
-            rv = @controller_data[key]
-          rescue
-            rv = default
-          end
-
-          rv
+          @controller_data.is_a?(Hash) ? @controller_data.fetch(key.to_sym, default) : default
         end
 
         def set_data(key, value)
           @controller_data = {} unless defined?(@controller_data) && @controller_data.is_a?(Hash)
-          @controller_data[key] = value
+          @controller_data[key.to_sym] = value
         end
         
         def get_param(key, default = nil)
