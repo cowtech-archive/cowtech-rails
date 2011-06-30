@@ -30,15 +30,22 @@ module Cowtech
         end
 
         def get_data(key = nil, default = "")
-          rv = default
-
-          unless @outputdata.nil? then
-            rv = @outputdata[key] unless @outputdata[key].nil?
+          rv = nil
+          
+          begin
+            rv = @controller_data[key]
+          rescue
+            rv = default
           end
 
           rv
         end
 
+        def set_data(key, value)
+          @controller_data = {} unless defined?(@controller_data) && @controller_data.is_a?(Hash)
+          @controller_data[key] = value
+        end
+        
         def get_param(key, default = nil)
           if params[key].blank? then default else params[key] end
         end
