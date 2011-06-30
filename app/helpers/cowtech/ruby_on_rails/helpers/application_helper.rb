@@ -29,8 +29,8 @@ module Cowtech
           end
         end
 
-        def google_font_stylesheet(font)
-          stylesheet_link_tag("http://fonts.googleapis.com/css?family=#{CGI.escape(font)}", :media => :all)
+        def google_font_stylesheet(font, additional = nil, version = "1")
+          stylesheet_link_tag("http://fonts.googleapis.com/css?family=#{CGI.escape(font)}#{additional}&v=#{version}", :media => :all)
         end
         
         def get_data(key = nil, default = "")
