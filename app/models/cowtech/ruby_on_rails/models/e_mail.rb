@@ -12,7 +12,7 @@ module Cowtech
           rv = YAML.load_file(Rails.root + "config/email.yml")
 
           ActionMailer::Base.raise_delivery_errors = true
-          ActionMailer::Base.default_charset = "utf-8"
+          ActionMailer::Base.charset = "utf-8"
           ActionMailer::Base.delivery_method = method
 
           case method
