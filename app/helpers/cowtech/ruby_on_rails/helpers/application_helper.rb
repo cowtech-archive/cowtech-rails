@@ -70,7 +70,7 @@ module Cowtech
           end
         end
 
-        def debug(what, type = :json)
+        def debug(what, type = :yaml)
           msg = ""
 
           if type == :json then 
@@ -79,6 +79,8 @@ module Cowtech
             rescue Exception => e
               msg = what.to_json
             end
+          elsif type == :yaml then
+            msg = what.to_yaml
           else 
             msg = what.inspect 
           end
