@@ -9,7 +9,7 @@ module Cowtech
     module Models
       class ModelBase < ::ActiveRecord::Base
         def self.deleted_column
-          "deleted"
+          "deleted_at"
         end
         
         def self.status_column
@@ -40,7 +40,7 @@ module Cowtech
           if !definitive then
             if self.deletable? then
               if self.has_attribute?(self.class.deleted_column) then
-                self.update_attribute(self.class.deleted_column, true)
+                self.update_attribute(self.class.deleted_column, DateTime.now)
                 true
               elsif self.has_attribute?(self.class.status_column) then
                 self.update_attribute(self.class.status_column, self.deleted_status)

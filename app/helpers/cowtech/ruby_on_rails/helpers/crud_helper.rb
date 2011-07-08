@@ -144,8 +144,8 @@ module Cowtech
           self.crud_query_initialize(data) unless data[:query_initialized]
           parameter = :search unless parameter
 
-          self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} = :deleted)", {:deleted => false}) unless data[:skip_deleted]
-          
+          self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} IS NULL)", {}) unless data[:skip_deleted]
+
           # GET QUERY
           args = params[parameter] unless args
 
