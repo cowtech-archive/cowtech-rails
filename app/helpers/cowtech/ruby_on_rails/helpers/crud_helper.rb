@@ -16,37 +16,37 @@ module Cowtech
         end
 
         def crud_get_class(data = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:class].constantize
         end
 
         def crud_get_records(data)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:records]
         end
 
         def crud_query_get_params(data = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:query_params]
         end
 
         def crud_get_sort_order(data = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:sort_order]
         end
 
         def crud_has_data?(data = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:data_bounds].total > 0
         end
 
         def crud_get_pager_data(data = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:pager_data]
         end
 
         def crud_get_data_bounds(data = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:data_bounds]
         end
 
@@ -55,49 +55,49 @@ module Cowtech
         end
 
         def crud_set_class(data, table = "")
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:class] = table
         end
 
         def crud_set_records(data, records = nil)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:records] = records
         end
 
         def crud_finalize_read(data = nil, records = nil, parameter = :count, per_page = nil)
-          data = self.crud_get_data unless data
-          records = self.crud_get_records(data) unless records
+          data = self.crud_get_data if !data
+          records = self.crud_get_records(data) if !records
           self.crud_calculate_data_bounds(data, records, per_page || params[parameter])
           data[:pager_data] = records.paginate(:page => data[:data_bounds].page, :per_page => data[:data_bounds].per_page, :total_entries => data[:data_bounds].total) if records.respond_to?(:paginate)
         end  
 
         def crud_query_initialize(data = nil, force = false)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:query_expr] = [] if !data[:query_expr] || force
           data[:query_params] = {} if !data[:query_params] || force    
           data[:query_initialized] = true
         end
 
         def crud_query_get(data = nil, query = nil)
-          data = self.crud_get_data unless data
-          self.crud_query_initialize(data) unless data[:query_initialized]
-          query = data[:query_expr] unless query
+          data = self.crud_get_data if !data
+          self.crud_query_initialize(data) if !data[:query_initialized]
+          query = data[:query_expr] if !query
 
           query.count.times do |i| query[i] = "(#{query[i]})" end
           query.join(" AND ")
         end
 
         def crud_query_dump(data = nil)
-          data = self.crud_get_data unless data
-          self.crud_query_initialize(data) unless data[:query_initialized]
+          data = self.crud_get_data if !data
+          self.crud_query_initialize(data) if !data[:query_initialized]
           raise Exception.new("QUERY: #{data[:query_expr]}\nPARAMS: #{data[:query_params].to_json}")
         end
 
         def crud_query_add_condition(data, expr, params = {})
-          data = self.crud_get_data unless data
-          self.crud_query_initialize(data) unless data[:query_initialized]
+          data = self.crud_get_data if !data
+          self.crud_query_initialize(data) if !data[:query_initialized]
 
-          expr = [expr] unless expr.respond_to?(:each)    
+          expr = [expr] if !expr.respond_to?(:each)    
           expr.each do |e| data[:query_expr] << e end
 
           data[:query_params].merge!(params)
@@ -135,21 +135,21 @@ module Cowtech
         end
 
         def crud_handle_search(data, *fields)
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           self.crud_handle_extended_search(data, fields)
         end
 
         def crud_handle_extended_search(data, fields, externals = nil, args = nil, parameter = :search)
-          data = self.crud_get_data unless data
-          self.crud_query_initialize(data) unless data[:query_initialized]
-          parameter = :search unless parameter
+          data = self.crud_get_data if !data
+          self.crud_query_initialize(data) if !data[:query_initialized]
+          parameter = :search if !parameter
 
-          self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} IS NULL)", {}) unless data[:skip_deleted]
+          self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} IS NULL)", {}) if !data[:skip_deleted]
 
           # GET QUERY
-          args = params[parameter] unless args
+          args = params[parameter] if !args
 
-          unless args.blank? then
+          if !args.blank? then
             search, parameters = self.crud_query_parse_search(args)
 
             # BUILD QUERY
@@ -162,7 +162,7 @@ module Cowtech
               externals.each do |external|
                 external_query = ""
     
-                unless external[:manual] then
+                if !external[:manual] then
                   external_conds = []
                   external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" end
                   external_field = external.fetch(:external_field, "id")
@@ -191,7 +191,7 @@ module Cowtech
         end
 
         def crud_handle_sorting(data, default_sorting, sort_data, sort_expression = "@PLACEHOLDER@, updated_at DESC")
-          data = self.crud_get_data unless data
+          data = self.crud_get_data if !data
           data[:sort_data] = sort_data
           sort = self.crud_get_sort_param(default_sorting, (sort_data || {}).keys)
           data[:sort] = "#{sort.what}-#{sort.how.downcase}"
@@ -237,8 +237,8 @@ module Cowtech
         end
 
         def crud_calculate_data_bounds(data, records = nil, per_page = nil)
-          data = self.crud_get_data unless data
-          records = data[:records] unless records
+          data = self.crud_get_data if !data
+          records = data[:records] if !records
           bounds = OpenStruct.new({:total => 0, :first => 0, :last => 0, :pages => 0, :page => 1, :per_page => 1})
 
           if records != nil && records.count > 0 then
@@ -274,7 +274,7 @@ module Cowtech
         def crud_end_write_action_url(additional = nil, absolute = false)
           rp = {}
 
-          unless absolute then
+          if !absolute then
             rp = session["params-#{self.location_name(:index)}"] || {}
             rp[:action] = :index
           end

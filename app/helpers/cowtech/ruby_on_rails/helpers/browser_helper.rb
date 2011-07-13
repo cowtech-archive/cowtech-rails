@@ -40,7 +40,7 @@ module Cowtech
         end
 
         def browser_classes
-          self.browser_detect unless @browser
+          self.browser_detect if !@browser
           rv = []
 
           # Add name and platform

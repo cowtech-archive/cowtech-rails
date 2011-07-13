@@ -9,13 +9,13 @@ module Cowtech
     module Helpers
       module ApplicationHelper
         def application_info
-          @application_info = YAML.load_file(Rails.root + "config/application_info.yml") unless @application_info
+          @application_info = YAML.load_file(Rails.root + "config/application_info.yml") if !@application_info
           @application_info
         end
 
         def location_name(action = nil, controller = nil)
-          controller = self.controller_name unless controller
-          action = self.action_name unless action
+          controller = self.controller_name if !controller
+          action = self.action_name if !action
           "#{controller}##{action}"
         end
 
@@ -38,7 +38,7 @@ module Cowtech
         end
 
         def set_data(key, value)
-          @controller_data = {} unless defined?(@controller_data) && @controller_data.is_a?(Hash)
+          @controller_data = {} if !(defined?(@controller_data) && @controller_data.is_a?(Hash))
           @controller_data[key.to_sym] = value
         end
         

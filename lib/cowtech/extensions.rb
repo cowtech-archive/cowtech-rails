@@ -167,7 +167,7 @@ module Cowtech
           def easter(year = nil)
             day = 1
             month = 3
-            year = Date.today.year unless year.is_valid_integer?
+            year = Date.today.year if !year.is_valid_integer?
 
             # GAUSS METHOD
             m = 24

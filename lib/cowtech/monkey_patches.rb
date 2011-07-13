@@ -34,7 +34,7 @@ if defined?(Mail) then
       smtp = Net::SMTP.new(settings[:address], settings[:port])
       if settings[:tls] || settings[:ssl]
         if smtp.respond_to?(:enable_tls)
-          unless settings[:openssl_verify_mode]
+          if !settings[:openssl_verify_mode]
             smtp.enable_tls
           else
             openssl_verify_mode = settings[:openssl_verify_mode]
@@ -48,7 +48,7 @@ if defined?(Mail) then
         end
       elsif settings[:enable_starttls_auto]
         if smtp.respond_to?(:enable_starttls_auto) 
-          unless settings[:openssl_verify_mode]
+          if !settings[:openssl_verify_mode]
             smtp.enable_starttls_auto
           else
             openssl_verify_mode = settings[:openssl_verify_mode]

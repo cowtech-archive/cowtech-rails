@@ -26,7 +26,7 @@ module Cowtech
         end
 
         def setup(method = :smtp)
-          @configuration = EMail.setup(method) unless @configuration
+          @configuration = EMail.setup(method) if !@configuration
           @configuration
         end
 
@@ -37,7 +37,7 @@ module Cowtech
           args = (if args.is_a?(Hash) then args else args[0] end).delete_if { |k,v| v.blank? }
 
           # AGGIUSTIAMO REPLY TO
-          args[:reply_to] = args[:from] unless args[:reply_to]
+          args[:reply_to] = args[:from] if !args[:reply_to]
 
           # OTTENIAMO IL BODY
           plain_body = args.delete(:body) || args.delete(:plain_body) || args.delete(:text_body) || args.delete(:plain_text) || args.delete(:text)
