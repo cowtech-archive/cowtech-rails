@@ -149,7 +149,7 @@ module Cowtech
           # GET QUERY
           args = params[parameter] if !args
 
-          if !args.blank? then
+          if args.present? then
             search, parameters = self.crud_query_parse_search(args)
 
             # BUILD QUERY
@@ -225,7 +225,7 @@ module Cowtech
         def crud_get_sort_param(default, valids = [])
           sort_by = get_param(:sort_by, default)
           mo = /^(?<what>[a-z0-9_]+)-(?<how>asc|desc)$/i.match(sort_by)
-          mo = /^(?<what>[a-z0-9_]+)-(?<how>asc|desc)$/i.match(default) if !mo || !(valids || []).include?(mo["what"])
+          mo = /^(?<what>[a-z0-9_]+)-(?<how>asc|desc)$/i.match(default) if !mo || !((valids || []).include?(mo["what"]))
 
           sf = sort_by.split("-")
           rv = OpenStruct.new({:what => mo["what"], :how => mo["how"].upcase})
