@@ -218,7 +218,7 @@ module Cowtech
           page = params[key]
           page = if params[key].is_valid_integer? then params[key].to_integer else 1 end
           page = 1 if page < 1
-          page = upperbound if (upperbound > 0 and page > upperbound)
+          page = upperbound if (upperbound > 0 && page > upperbound)
           page
         end
 
