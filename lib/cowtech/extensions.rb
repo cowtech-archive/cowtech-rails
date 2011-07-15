@@ -66,7 +66,7 @@ module Cowtech
         end
   
         def dump
-          raise Exception.new("DUMP: #{self.to_json}")
+          raise Exception.new("DUMP: #{self.to_yaml}")
         end
       end
 
@@ -97,12 +97,20 @@ module Cowtech
       end
 
       module Hash
-        def method_missing(method, *arg)
-          self[method.to_sym] || self[method.to_s] 
+        def method_missing(method, *args, &block)
+          if self.has_key?(method.to_sym) || self.has_key?(method.to_s) then
+            self[method.to_sym] || self[method.to_s] 
+          else
+            super(method, *args, &block)
+          end
         end
 
         def respond_to?(method)
-          self.has_key?(method.to_sym) || self.has_key?(method.to_s)
+          if self.has_key?(method.to_sym) || self.has_key?(method.to_s) then
+            true
+          else
+            super(method)
+          end
         end
       end
 
