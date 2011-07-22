@@ -74,11 +74,19 @@ module Cowtech
         def to_i
           1
         end
+        
+        def value
+          self
+        end
       end
 
       module False
         def to_i
           0
+        end
+
+        def value
+          self
         end
       end
 
@@ -229,6 +237,10 @@ module Cowtech
   
         def in_months
           ((self.year - 1) % 2000) * 12 + self.month
+        end
+        
+        def utc_time
+          (self.respond_to?(:utc) ? self : self.to_datetime).utc.to_time
         end
       end
     end
