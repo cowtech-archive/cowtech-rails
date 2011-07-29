@@ -2,16 +2,6 @@ require 'rubygems'
 require 'jeweler'
 require "./lib/cowtech/version.rb"
 
-#begin
-#  require 'yaml'
-#  require 'psych'
-#  YAML::ENGINE.yamler = 'psych'
-#rescue LoadError => e
-#  $stderr.puts e.message
-#  $stderr.puts "Run `gem install psych` to install missing gems"
-#  exit e.status_code
-#end
-
 Jeweler::Tasks.new do |gem|
   gem.name = "cowtech-rails"
   gem.homepage = "http://github.com/ShogunPanda/cowtech-rails"
@@ -22,6 +12,7 @@ Jeweler::Tasks.new do |gem|
   gem.authors = ["Shogun"]
   gem.version = Cowtech::Rails::Version::STRING
   gem.files = Dir["{lib}/**/*", "{app}/**/*", "{config}/**/*", "{rails}/**/*"]
+  gem.add_dependency "cowtech-extensions"
 end
 
 Jeweler::RubygemsDotOrgTasks.new

@@ -16,38 +16,4 @@ module Cowtech
   end
 end
 
-Object.class_eval do
-  include Cowtech::RubyOnRails::Extensions::Object
-end
-
-TrueClass.class_eval do
-  include Cowtech::RubyOnRails::Extensions::True
-end
-
-FalseClass.class_eval do
-  include Cowtech::RubyOnRails::Extensions::False
-end
-
-String.class_eval do
-  include Cowtech::RubyOnRails::Extensions::String
-end
-
-Time.class_eval do
-  include Cowtech::RubyOnRails::Extensions::DateTime
-end
-
-Date.class_eval do
-  include Cowtech::RubyOnRails::Extensions::DateTime
-end
-
-DateTime.class_eval do
-  include Cowtech::RubyOnRails::Extensions::DateTime
-end
-
-Hash.class_eval do
-  include Cowtech::RubyOnRails::Extensions::Hash  
-end
-
-Pathname.class_eval do
-  include Cowtech::RubyOnRails::Extensions::Pathname  
-end
+Cowtech::Extensions.load!
