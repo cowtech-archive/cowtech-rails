@@ -9,8 +9,8 @@ module Cowtech
     module Version
       MAJOR = 1
       MINOR = 9
-      PATCH = 5
-      BUILD = 3
+      PATCH = 6
+      BUILD = 0
 
       STRING = [MAJOR, MINOR, PATCH, BUILD].compact.join('.')
     end
