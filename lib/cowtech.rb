@@ -7,7 +7,7 @@
 dir = File.dirname(__FILE__) 
 
 require 'cowtech-extensions'
-require "cowtech-extensions/activerecord"
+require 'cowtech/extensions'
 require 'cowtech/monkey_patches'
 #require dir + '/../app/models/e_mail'
 #require dir + '/../app/models/model_base'
@@ -18,4 +18,3 @@ module Cowtech
 end
 
 Cowtech::Extensions.load!
-Cowtech::Extensions.load!(["activerecord"])

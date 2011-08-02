@@ -4,12 +4,6 @@
 # Licensed under the MIT license, which can be found at http://www.opensource.org/licenses/mit-license.php.
 #
 
-module SubdomainFu
-  def self.override_only_path?
-    true
-  end
-end
-
 # To enable real SSL
 if defined?(Mail) then
   class Mail::SMTP
@@ -68,4 +62,8 @@ if defined?(Mail) then
       self
     end
   end
+end
+
+class ActiveRecord::Base
+  include Cowtech::Rails::Extensions::AR
 end
