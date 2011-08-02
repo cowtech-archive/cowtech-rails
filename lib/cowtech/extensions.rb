@@ -17,22 +17,6 @@ module Cowtech
         extend ActiveSupport::Concern
   
         module ClassMethods
-          if defined?(Rails) then
-            def table_prefix
-              p = ActiveRecord::Base.configurations[Rails.env]["table_prefix"]
-              !p.blank? ? p + "_" : ""
-            end
-
-            def table_suffix
-              p = ActiveRecord::Base.configurations[Rails.env]["table_suffix"]
-              !p.blank? ? p + "_" : ""
-            end
-          end
-        
-          def set_table_name(value = nil, &block)  
-            define_attr_method :table_name, "#{ActiveRecord::Base.table_prefix}#{value}#{ActiveRecord::Base.table_suffix}", &block  
-          end
-
           def find_or_create(oid, attributes = nil)
             begin
               self.find(oid)
