@@ -64,6 +64,8 @@ if defined?(Mail) then
   end
 end
 
-class ActiveRecord::Base
-  include Cowtech::RubyOnRails::Extensions::AR
+if defined?(ActiveRecord) then
+  class ActiveRecord::Base
+    include Cowtech::RubyOnRails::Extensions::AR
+  end
 end
