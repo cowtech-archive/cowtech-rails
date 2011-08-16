@@ -29,7 +29,7 @@ module Cowtech
           @configuration ||= EMail.setup(method, file)
         end
 
-        def generic(*args)
+        def generic(args)
           # Load configuration
           if !@configuration then
             conf = args.delete(:configuration)
