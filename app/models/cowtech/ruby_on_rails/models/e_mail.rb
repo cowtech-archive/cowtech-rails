@@ -30,7 +30,7 @@ module Cowtech
         end
 
         def generic(*args)
-          self.setup
+          self.setup(args.delete(:method) || :stmp, args.delete(:configuration))
 
           # OTTENIAMO GLI ARGOMENTI
           args = (if args.is_a?(Hash) then args else args[0] end).delete_if { |k,v| v.blank? }
