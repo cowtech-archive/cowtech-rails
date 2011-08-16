@@ -8,8 +8,8 @@ module Cowtech
   module RubyOnRails
     module Models
       class EMail < ActionMailer::Base
-        def self.setup(method = :smtp)
-          rv = YAML.load_file(Rails.root + "config/email.yml")
+        def self.setup(method = :smtp, file = nil)
+          rv = YAML.load_file(file || (Rails.root + "config/email.yml"))
 
           ActionMailer::Base.raise_delivery_errors = true
           ActionMailer::Base.charset = "utf-8"
@@ -25,9 +25,8 @@ module Cowtech
           rv
         end
 
-        def setup(method = :smtp)
-          @configuration = EMail.setup(method) if !@configuration
-          @configuration
+        def setup(method = :smtp, file = nil)
+          @configuration ||= EMail.setup(method, file)
         end
 
         def generic(*args)
