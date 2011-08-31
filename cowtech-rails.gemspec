@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cowtech-rails}
-  s.version = "1.9.7.6"
+  s.version = "2.0.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Shogun}]
-  s.date = %q{2011-08-23}
+  s.date = %q{2011-08-31}
   s.description = %q{A general purpose Rails utility plugin.}
   s.email = %q{shogun_panda@me.com}
   s.extra_rdoc_files = [
@@ -17,12 +17,16 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "app/helpers/cowtech/ruby_on_rails/helpers/application_helper.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/ar_crud_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/browser_helper.rb",
-    "app/helpers/cowtech/ruby_on_rails/helpers/crud_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/format_helper.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/mongoid_crud_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/validation_helper.rb",
+    "app/models/cowtech/ruby_on_rails/models/ar/model_base.rb",
     "app/models/cowtech/ruby_on_rails/models/e_mail.rb",
-    "app/models/cowtech/ruby_on_rails/models/model_base.rb",
+    "app/models/cowtech/ruby_on_rails/models/mongoid/cowtech.rb",
+    "app/models/cowtech/ruby_on_rails/models/mongoid/logging.rb",
+    "app/models/cowtech/ruby_on_rails/models/mongoid/sequence.rb",
     "lib/cowtech.rb",
     "lib/cowtech/extensions.rb",
     "lib/cowtech/monkey_patches.rb",
