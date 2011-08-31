@@ -9,33 +9,36 @@ module Cowtech
     module Helpers
       module BrowserHelper
         def browser_detect
-          rv = {:engine => :unknown, :version => "0", :platform => :unknown, :agent => request.user_agent || request.env['HTTP_USER_AGENT'].downcase || ""}
-          agent = rv[:agent].downcase
+          rv = {:engine => :unknown, :version => "0", :platform => :unknown, :agent => request.user_agent || request.env['HTTP_USER_AGENT'].try(:downcase) || ""}
+          
+          if rv[:agent].present?
+            agent = rv[:agent].downcase
 
-          # Identify engine
-          if agent =~ /opera/ then
-            rv[:engine] = :opera
-          elsif agent =~ /webkit/ then
-            rv[:engine] = (agent =~ /chrome|chromium/ ? :chrome : :safari)
-          elsif agent =~ /msie/ || agent =~ /webtv/ then
-            rv[:engine] = :msie
-          elsif agent =~ /mozilla/ && agent !~ /compatible/ then
-            rv[:engine] = :mozilla
+            # Identify engine
+            if agent =~ /opera/ then
+              rv[:engine] = :opera
+            elsif agent =~ /webkit/ then
+              rv[:engine] = (agent =~ /chrome|chromium/ ? :chrome : :safari)
+            elsif agent =~ /msie/ || agent =~ /webtv/ then
+              rv[:engine] = :msie
+            elsif agent =~ /mozilla/ && agent !~ /compatible/ then
+              rv[:engine] = :mozilla
+            end
+
+            # Identify version
+            rv[:version] = $1 if agent =~ /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/
+            rv[:version_number] = rv[:version].to_f
+
+            # Identify platform
+            if agent =~ /linux/
+              rv[:platform] = :linux
+            elsif agent =~ /macintosh|mac os x/ then
+              rv[:platform] = :mac
+            elsif agent =~ /windows|win32|win64/ then
+              rv[:platform] = :windows
+            end
           end
-
-          # Identify version
-          rv[:version] = $1 if agent =~ /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/
-          rv[:version_number] = rv[:version].to_f
-
-          # Identify platform
-          if agent =~ /linux/
-            rv[:platform] = :linux
-          elsif agent =~ /macintosh|mac os x/ then
-            rv[:platform] = :mac
-          elsif agent =~ /windows|win32|win64/ then
-            rv[:platform] = :windows
-          end
-
+          
           @browser = rv
         end
 
