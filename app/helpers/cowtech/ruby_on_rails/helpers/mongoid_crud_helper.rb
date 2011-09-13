@@ -50,7 +50,7 @@ module Cowtech
 
         def mongo_fetch_data(args = {})
           @mongo_records = @mongo_query.order_by(@mongo_sort_order)
-          self.mongo_calculate_bounds(args.reverse_merge(:per_page => (args[:per_page] || params[args[:parameter] || :count])))
+          self.mongo_calculate_bounds(args.reverse_merge(:per_page => (args[:per_page] || @mongo_per_page || params[args[:parameter] || :count])))
           @records = @mongo_records.skip(@mongo_bounds[:first] - 1).limit(@mongo_bounds[:per_page])
           @mongo_pager = WillPaginate::Collection.new(@mongo_bounds[:page], @mongo_bounds[:per_page], @mongo_bounds[:total])
         end  
@@ -152,10 +152,6 @@ module Cowtech
 
         def mongo_form_submit_label(args = {})
           args[:record].try(:new_record?) ? "Create" : "Edit"
-        end
-
-        def mongo_yesno
-          [OpenStruct.new(:value => true, :label => "Sì"), OpenStruct.new(:value => false, :label => "No")]
         end
 
         def mongo_get_page_param(args = {})

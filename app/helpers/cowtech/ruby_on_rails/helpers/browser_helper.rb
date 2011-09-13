@@ -11,7 +11,7 @@ module Cowtech
         def browser_detect
           rv = {:engine => :unknown, :version => "0", :platform => :unknown, :agent => request.user_agent || request.env['HTTP_USER_AGENT'].try(:downcase) || ""}
           
-          if rv[:agent].present?
+          if rv[:agent].present? then
             agent = rv[:agent].downcase
 
             # Identify engine
@@ -30,7 +30,7 @@ module Cowtech
             rv[:version_number] = rv[:version].to_f
 
             # Identify platform
-            if agent =~ /linux/
+            if agent =~ /linux/ then
               rv[:platform] = :linux
             elsif agent =~ /macintosh|mac os x/ then
               rv[:platform] = :mac

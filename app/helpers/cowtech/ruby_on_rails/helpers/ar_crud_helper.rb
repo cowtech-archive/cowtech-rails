@@ -263,10 +263,6 @@ module Cowtech
           session["params-#{self.location_name}"] = (params.delete_if {|k,v| blacklist.include?(k) || params[k].is_a?(Tempfile)})
         end
 
-        def crud_yesno
-          [OpenStruct.new(:value => true, :label => "Sì"), OpenStruct.new(:value => false, :label => "No")]
-        end
-
         def crud_end_write_action(additional = nil, absolute = false)
           redirect_to self.crud_end_write_action_url(additional, absolute)
         end
