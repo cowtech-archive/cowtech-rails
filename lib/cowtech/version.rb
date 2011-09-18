@@ -8,9 +8,9 @@ module Cowtech
   module Rails
     module Version
       MAJOR = 2
-      MINOR = 0
+      MINOR = 1
       PATCH = 0
-      BUILD = 2
+      BUILD = 0
 
       STRING = [MAJOR, MINOR, PATCH, BUILD].compact.join('.')
     end

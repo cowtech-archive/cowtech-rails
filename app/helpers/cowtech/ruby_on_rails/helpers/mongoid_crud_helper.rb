@@ -66,7 +66,15 @@ module Cowtech
 
         def mongo_add_query_conditions(args = {})
           (args[:conditions] || []).ensure_array.each do |condition|
-            @mongo_query = @mongo_query.where(condition) if condition.is_a?(Hash)
+            if condition.is_a?(Hash) then
+              condition.each_pair do |key, val|
+                if key == "$or" then
+                  @mongo_query = @mongo_query.any_of(val)
+                else
+                  @mongo_query = @mongo_query.where({key => val})
+                end                 
+              end
+            end
           end
 
           @mongo_query = yield(@mongo_query) if block_given?
@@ -109,7 +117,7 @@ module Cowtech
           parameter = args[:parameter] || :search
 
           # Get the query
-          search_query = params[parameter]
+          search_query = args[:query] || params[parameter]
           if search_query.present? then
             expr = self.mongo_parse_search(search_query)
 

@@ -13,18 +13,22 @@ module Cowtech
           @application_info
         end
 
+        def full_controller_name
+          self.controller_path
+        end
+        
         def location_name(action = nil, controller = nil)
-          controller = self.controller_name if !controller
+          controller = self.full_controller_name if !controller
           action = self.action_name if !action
           "#{controller}##{action}"
         end
 
         def additional_tag(what = :js, *args)
           if what == :js then
-            args.insert(0, "app/#{self.controller_name}.js")
+            args.insert(0, "app/#{self.full_controller_name}.js")
             javascript_include_tag(*args)
           elsif what == :css then
-            args.insert(0, "app/#{self.controller_name}.css")
+            args.insert(0, "app/#{self.full_controller_name}.css")
             stylesheet_link_tag(*args)
           end
         end
