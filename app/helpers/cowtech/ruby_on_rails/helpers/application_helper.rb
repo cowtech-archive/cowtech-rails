@@ -13,8 +13,9 @@ module Cowtech
           @application_info
         end
 
-        def full_controller_name
-          self.controller_path
+        def full_controller_name(css = false)
+          rv = self.controller_path
+          !css ? rv : rv.gsub("/", "_")
         end
         
         def location_name(action = nil, controller = nil)
