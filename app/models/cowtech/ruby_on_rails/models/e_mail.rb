@@ -37,7 +37,7 @@ module Cowtech
             if conf then
               @configuration = conf
             else
-              self.setup(args.delete(:method) || :stmp, args.delete(:configuration_file))
+              self.setup(args.delete(:method) || :smtp, args.delete(:configuration_file))
             end
           end
           
