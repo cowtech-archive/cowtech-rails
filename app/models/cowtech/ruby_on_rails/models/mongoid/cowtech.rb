@@ -53,6 +53,10 @@ module Cowtech
               where(:deleted_at.exists => false)
             end
     
+            def valid_object_id?(oid)
+              oid.blank? || BSON::ObjectId.legal?(oid)
+            end
+            
             def __index_find(oid)
               oid.blank? ? nil : self.find(BSON::ObjectId(oid))
             rescue ::Mongoid::Errors::DocumentNotFound, BSON::InvalidObjectId
