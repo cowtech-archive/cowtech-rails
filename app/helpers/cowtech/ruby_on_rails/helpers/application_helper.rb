@@ -63,15 +63,15 @@ module Cowtech
           ApplicationController.setup_json_response(type)
         end
 
-        def custom_respond_with(data, format = nil)
+        def custom_respond_with(data, format = nil, status = :ok)
           return if performed?
 
           self._normalize_type(format)
 
           if request.format == :text then
-              render :text => data
+              render :text => data, :status => status
           elsif request.format == :json then
-              render :json => data
+              render :json => data, :status => status
           end
         end
 
