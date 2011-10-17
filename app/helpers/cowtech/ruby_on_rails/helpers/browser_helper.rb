@@ -67,7 +67,7 @@ module Cowtech
           
           rv = true
           rv = rv && (engine == @browser[:engine]) if engine.present? 
-          rv = rv && (version == @browser[:version]) if version.present? 
+          rv = rv && (version == @browser[:version_number]) if version.present? 
           rv = rv && (platform == @browser[:platform]) if platform.present? 
           rv 
         end
