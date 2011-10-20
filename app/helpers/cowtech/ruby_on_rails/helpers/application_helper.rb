@@ -53,6 +53,7 @@ module Cowtech
 
         def _normalize_type(format = nil)
           format = :text if !([:text, :json, :jsonp].include?(format))
+          format
         end
 
         def setup_json_response(type = :base)
