@@ -71,7 +71,9 @@ module Cowtech
           if request.format == :text then
               render :text => data, :status => status
           elsif request.format == :json then
-              render :json => data, :status => status
+              render :json => data, :status => status, :callback
+          elsif request.format == :jsonp then
+              render :json => data, :status => status, :callback => params[:callback]
           end
         end
 
