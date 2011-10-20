@@ -52,11 +52,7 @@ module Cowtech
         end
 
         def _normalize_type(format = nil)
-          if format != nil then
-            request.format = format
-          else
-            request.format = :text if request.format != :json
-          end
+          format = :text if !([:text, :json, :jsonp].include?(format))
         end
 
         def setup_json_response(type = :base)
@@ -66,13 +62,14 @@ module Cowtech
         def custom_respond_with(data, format = nil, status = :ok)
           return if performed?
 
-          self._normalize_type(format)
+          format = request.format if format.blank?
+          format = self._normalize_type(format)
 
-          if request.format == :text then
+          if format == :text then
               render :text => data, :status => status
-          elsif request.format == :json then
+          elsif format == :json then
               render :json => data, :status => status
-          elsif request.format == :jsonp then
+          elsif format == :jsonp then
               render :json => data, :status => status, :callback => params[:callback]
           end
         end
