@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{cowtech-rails}
-  s.version = "2.2.3.3"
+  s.name = "cowtech-rails"
+  s.version = "2.3.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Shogun}]
-  s.date = %q{2011-10-20}
-  s.description = %q{A general purpose Rails utility plugin.}
-  s.email = %q{shogun_panda@me.com}
+  s.authors = ["Shogun"]
+  s.date = "2011-11-16"
+  s.description = "A general purpose Rails utility plugin."
+  s.email = "shogun_panda@me.com"
   s.extra_rdoc_files = [
     "README"
   ]
@@ -30,14 +30,19 @@ Gem::Specification.new do |s|
     "lib/cowtech.rb",
     "lib/cowtech/extensions.rb",
     "lib/cowtech/monkey_patches.rb",
+    "lib/cowtech/tasks/app.rake",
+    "lib/cowtech/tasks/log.rake",
+    "lib/cowtech/tasks/mongodb.rake",
+    "lib/cowtech/tasks/server.rake",
+    "lib/cowtech/tasks/sql.rake",
     "lib/cowtech/version.rb",
     "rails/init.rb"
   ]
-  s.homepage = %q{http://github.com/ShogunPanda/cowtech-rails}
-  s.licenses = [%q{MIT}]
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.5}
-  s.summary = %q{A general purpose Rails utility plugin.}
+  s.homepage = "http://github.com/ShogunPanda/cowtech-rails"
+  s.licenses = ["MIT"]
+  s.require_paths = ["lib"]
+  s.rubygems_version = "1.8.11"
+  s.summary = "A general purpose Rails utility plugin."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
