@@ -14,6 +14,13 @@ require 'cowtech/monkey_patches'
 
 module Cowtech
   class Engine < Rails::Engine
+    rake_tasks do
+      load "cowtech/tasks/app.rake"
+      load "cowtech/tasks/log.rake"
+      load "cowtech/tasks/server.rake"
+      load "cowtech/tasks/sql.rake"
+      load "cowtech/tasks/mongodb.rake"
+    end
   end
 end
 
