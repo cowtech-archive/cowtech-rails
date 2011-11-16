@@ -42,7 +42,7 @@ module Cowtech
   
       def self.push
         puts "--- Pushing to server ..."
-        run_command("git push alpha")
+        run_command("git push server")
       end
   
       def self.clear_cache
