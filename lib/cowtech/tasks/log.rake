@@ -16,7 +16,7 @@ module Cowtech
         IO.popen(cmd) do |f| print f.gets end
       end
   
-      def self.rotate
+      def self.rotate(email_class = nil)
         puts "Rotating log files..."
     
         # Get timestamp
@@ -33,9 +33,8 @@ module Cowtech
           new_file = generate_new_name(new_name, i)
       
           # Send file via mail
-          @email_class = defined?(Common::EMail) ? Common::EMail : EMail
-          @email_class.log_report(log_file).deliver if Rails.env == "production"
-      
+          email_class.constantize.log_report(log_file).deliver if Rails.env == "production" && email_class.present?
+
           # Copy file
           FileUtils.cp(log_file, new_file)
       
@@ -66,8 +65,8 @@ end
 
 namespace :log do
   desc "Rotates log files"
-  task :rotate => :environment do |task|
-    Cowtech::RubyOnRails::LogUtils.rotate
+  task :rotate => [:email_class] => [:environment] do |task, args|
+    Cowtech::RubyOnRails::LogUtils.rotate(args[:email_class])
   end
   
   desc "Clean every log file"
