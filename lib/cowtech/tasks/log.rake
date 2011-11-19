@@ -65,7 +65,7 @@ end
 
 namespace :log do
   desc "Rotates log files"
-  task :rotate => [:email_class] => [:environment] do |task, args|
+  task :rotate, [:email_class] => [:environment] do |task, args|
     Cowtech::RubyOnRails::LogUtils.rotate(args[:email_class])
   end
   
