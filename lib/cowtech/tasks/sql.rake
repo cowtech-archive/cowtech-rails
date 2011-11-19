@@ -49,7 +49,7 @@ module Cowtech
       end
     end
     
-    class Cowtech::RubyOnRails::SqlUtils
+    class SqlUtils
       @@log_compressor_command = "bzip2"
       @@log_compressed_extension = "bz2"
 
