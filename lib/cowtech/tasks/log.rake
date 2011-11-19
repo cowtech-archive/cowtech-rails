@@ -10,7 +10,9 @@ module Cowtech
       @@log_compressor_command = "bzip2"
       @@log_compressed_extension = "bz2"
 
-      def self.generate_new_name(base, i = 0); "#{base}#{if i > 0 then "-#{i}" else "" end}"  end
+      def self.generate_new_name(base, i = 0)
+        (Rails.root + "backups/logs/#{base}#{if i > 0 then "-#{i}" else "" end}").to_s  
+      end
 
       def self.run_command(cmd)
         IO.popen(cmd) do |f| print f.gets end
@@ -25,12 +27,19 @@ module Cowtech
         # For each log file
         Dir.glob(Rails.root + "log/*.log") do |log_file|
           puts "\tRotating #{log_file} ..."
-          new_name = "#{log_file}-#{tstamp}" # CREIAMO IL NOME
+          new_name = "#{File.basename(log_file)}-#{tstamp}" # CREIAMO IL NOME
       
           # Resolv duplicates
           i = 0
-          i += 1 while File.exists?("#{generate_new_name(new_name, i)}.#{@@log_compressed_extension}")
-          new_file = generate_new_name(new_name, i)
+          new_file = catch(:name) do
+            i += 1
+            name = generate_new_name(new_name, i)
+            redo if File.exists?(name . + "." + @@log_compressed_extension)
+            throw :name, name
+          end
+
+          dir = File.dirname(new_file)
+          FileUtils.mkdir_p(dir) if !File.directory?(dir)
       
           # Send file via mail
           email_class.constantize.log_report(log_file).deliver if Rails.env == "production" && email_class.present?

@@ -13,7 +13,7 @@ module Cowtech
       def self.run_command(cmd); system(cmd) end
 
       def self.mysql_execute(config)
-        dest_file = Rails.root + "db/backup/db-#{Time.now.strftime("%Y%m%d-%H%M%S")}.sql"
+        dest_file = Rails.root + "backups/mysql/db-#{Time.now.strftime("%Y%m%d-%H%M%S")}.sql"
     
         dump_cmd = "mysqldump"
         dump_args = {"" => "-R -r \"#{dest_file}\"", "host" => "-h @@ARG@@", "username" => "-u @@ARG@@", "password" => "--password=\"@@ARG@@\"", "database" => "@@ARG@@"}
@@ -30,7 +30,7 @@ module Cowtech
     
         # Create directory
         dir = File.dirname(dest_file)
-        FileUtils.mkdir(dir) if !File.directory?(dir)
+        FileUtils.mkdir_p(dir) if !File.directory?(dir)
     
         # Execute command
         puts "\tDumping data ..."
