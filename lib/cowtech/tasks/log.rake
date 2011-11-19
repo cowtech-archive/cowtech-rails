@@ -61,7 +61,7 @@ module Cowtech
       def self.clean
         puts "Cleaning log files..."
   
-        ["log/*.log", "log/*.#{@@log_compressed_extension}"].each do |path|
+        ["backups/logs/*.log", "backups/logs/*.#{@@log_compressed_extension}"].each do |path|
           Dir.glob(Rails.root + path) do |log_file|
             puts "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
             File.delete(log_file)
