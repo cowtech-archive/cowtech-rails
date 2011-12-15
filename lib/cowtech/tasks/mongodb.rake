@@ -16,7 +16,7 @@ module Cowtech
         
         # Get configuration
         mongo_config = YAML.load_file(Rails.root + "config/mongoid.yml")
-        databases = mongo_config["backup_databases"].as_s.split(/\s*,\s*/)        
+        databases = mongo_config["backup_databases"].ensure_string.split(/\s*,\s*/)        
         return if databases.blank?
 
         # Set output dir
