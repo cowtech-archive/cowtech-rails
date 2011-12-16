@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "app/helpers/cowtech/ruby_on_rails/helpers/validation_helper.rb",
     "app/models/cowtech/ruby_on_rails/models/ar/model_base.rb",
     "app/models/cowtech/ruby_on_rails/models/e_mail.rb",
+    "app/models/cowtech/ruby_on_rails/models/scheduler.rb",
     "app/models/cowtech/ruby_on_rails/models/mongoid/cowtech.rb",
     "app/models/cowtech/ruby_on_rails/models/mongoid/logging.rb",
     "app/models/cowtech/ruby_on_rails/models/mongoid/sequence.rb",
