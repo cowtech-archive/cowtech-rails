@@ -15,15 +15,16 @@ module Cowtech
 				attr_accessor :scheduler
 				
 				def self.start(application_class, log_file, pid_file, &definitions)
-					self.new(application_class, log_file, pid_file, &definitions).execute
+					self.new(application_class, log_file, pid_file, definitions).execute
 				end
 				
-				def initialize(application_class, log_file, pid_file, &definitions)
+				def initialize(application_class, log_file, pid_file, block = nil, &definitions)
 					@application = application_class
 					@logger = Logger.new(log_file)
 					@pid = pid_file.to_s
-					@definitions = definitions
+					@definitions = block || definitions
 					@scheduler = Rufus::Scheduler.start_new
+					@rake_loaded = false
 				end
 	
 				def log_string(message, options = {})
@@ -98,7 +99,11 @@ module Cowtech
 				end
 				
 				def handle_plain
-					@application.load_tasks
+					if !@rake_loaded then
+						@application.load_tasks
+						@rake_loaded = true
+					end
+					
 					@definitions.call(self)
 				end				
 				

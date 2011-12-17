@@ -6,6 +6,7 @@
 
 dir = File.dirname(__FILE__) 
 
+require 'rake'
 require 'cowtech-extensions'
 require 'cowtech/extensions'
 require 'cowtech/monkey_patches'
