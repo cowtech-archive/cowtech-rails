@@ -12,9 +12,10 @@ module Cowtech
 
       def self.run_command(cmd); system(cmd) end
 
-      def self.mysql_execute(config)
-        dest_file = Rails.root + "backups/mysql/db-#{Time.now.strftime("%Y%m%d-%H%M%S")}.sql"
-    
+      def self.mysql_execute(config, task_args)
+        dest_file = Rails.root + "backups/mysql/mysql-#{Time.now.strftime("%Y%m%d-%H%M%S")}.sql"
+    		final_file = dest_file.to_s + "." + @@log_compressed_extension
+		
         dump_cmd = "mysqldump"
         dump_args = {"" => "-R -r \"#{dest_file}\"", "host" => "-h @@ARG@@", "username" => "-u @@ARG@@", "password" => "--password=\"@@ARG@@\"", "database" => "@@ARG@@"}
 
@@ -40,7 +41,13 @@ module Cowtech
         puts "\tCompressing backup ..."
         Cowtech::RubyOnRails::MysqlUtils.run_command(@@log_compressor_command + " " + dest_file.to_s)
     
-        puts "Backup saved in #{dest_file}.#{@@log_compressed_extension}"
+        # Send file via mail
+				if Rails.env == "production" && task_args[:email_class].present? then
+					puts "\tForwarding backup file to requested email address..."
+        	task_args[:email_class].constantize.backup(final_file).deliver
+				end
+
+        puts "Backup saved in #{final_file}"
       end
 
       # ALIAS
@@ -71,14 +78,14 @@ module Cowtech
         end 
       end
 
-      def self.backup
+      def self.backup(args)
         puts "--- Backupping database ..."
         # OTTENIAMO LA CONFIGURAZIONE
         db_config = YAML.load_file(Rails.root + "config/database.yml")
         env = Rails.env
 
         # ESEGUIAMO
-        Cowtech::RubyOnRails::MysqlUtils.send("#{db_config[env]["adapter"]}_execute", db_config[env])
+        Cowtech::RubyOnRails::MysqlUtils.send("#{db_config[env]["adapter"]}_execute", db_config[env], args)
       end
 
       def self.backup_clean
@@ -102,8 +109,8 @@ namespace :mysql do
   end 
   
   desc "Backups database"
-  task :backup do |task|
-    Cowtech::RubyOnRails::SqlUtils.backup
+  task :backup, [:email_class] => [:environment] do |task, args|
+    Cowtech::RubyOnRails::SqlUtils.backup(args)
   end
   
   desc "Clean every backup file"

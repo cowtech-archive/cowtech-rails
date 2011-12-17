@@ -6,12 +6,12 @@
 module Cowtech
   module RubyOnRails
     class MongoUtils
-      @@log_compressor_command = "tar cjvf"
+      @@log_compressor_command = "tar cjf"
       @@log_compressed_extension = "tbz2"
 
       def self.run_command(cmd); system(cmd) end
 
-      def self.backup
+      def self.backup(task_args)
         puts "--- Backupping MongoDB ..."
         
         # Get configuration
@@ -21,6 +21,7 @@ module Cowtech
 
         # Set output dir
         dest_file = Rails.root + "backups/mongodb/mongo-#{Time.now.strftime("%Y%m%d-%H%M%S")}"
+				final_file = dest_file.to_s + "." + @@log_compressed_extension
 
         # Create directory
         dir = File.dirname(dest_file)
@@ -39,9 +40,15 @@ module Cowtech
         
         # Compress
         puts "\t\tCompressing backup ..."
-        Cowtech::RubyOnRails::MongoUtils.run_command(@@log_compressor_command + " " + dest_file.to_s + "." + @@log_compressed_extension + " " + dest_file.to_s)
+        Cowtech::RubyOnRails::MongoUtils.run_command(@@log_compressor_command + " " + final_file + " " + dest_file.to_s)
         FileUtils.rm_rf(dest_file.to_s)
-  
+ 
+        # Send file via mail
+				if Rails.env == "production" && task_args[:email_class].present? then
+					puts "\tForwarding backup file to requested email address..."
+        	task_args[:email_class].constantize.backup(final_file).deliver
+				end
+
         puts "Backup saved in #{dest_file}.#{@@log_compressed_extension}"
       end
 
@@ -61,8 +68,8 @@ end
 
 namespace :mongodb do
   desc "Backups MongoDB collections"
-  task :backup do |task|
-    Cowtech::RubyOnRails::MongoUtils.backup
+  task :backup, [:email_class] => [:environment] do |task, args|
+    Cowtech::RubyOnRails::MongoUtils.backup(args)
   end
   
   desc "Clean every backup file"

@@ -14,7 +14,11 @@ module Cowtech
 				attr_accessor :definitions
 				attr_accessor :scheduler
 				
-				def initialize(application_class, log_file, pid_file, definitions)
+				def self.start(application_class, log_file, pid_file, &definitions)
+					self.new(application_class, log_file, pid_file, &definitions).execute
+				end
+				
+				def initialize(application_class, log_file, pid_file, &definitions)
 					@application = application_class
 					@logger = Logger.new(log_file)
 					@pid = pid_file.to_s
@@ -63,49 +67,43 @@ module Cowtech
 					end
 				end
 
-				def define_tasks
-					raise "Must be overriden by subclasses."
-				end
-
 				def execute
 					self.log("Scheduler started.", {:prefix => "MAIN"})
 					self.handle_plain
-
-					# if defined?(PhusionPassenger) then
-					# 	self.handle_phusion_passenger
-					# else
-					# 	self.handle_plain
-					# end
 				end
 				
 				def handle_phusion_passenger
-					File.delete(@pid) if FileTest.exists?(@pid)
+					if defined?(PhusionPassenger) then
+						File.delete(@pid) if FileTest.exists?(@pid)
 					
-				  PhusionPassenger.on_event(:starting_worker_process) do |forked|
-				    if forked && !FileTest.exists?(@pid) then
-							self.log("Starting process with PID #{$$}", {:prefix => ["WORKER", "START"]})
-				      File.open(@pid, "w") {|f| f.write($$) }
-				      self.handle_plain
-				    end
-				  end
+					  PhusionPassenger.on_event(:starting_worker_process) do |forked|
+					    if forked && !FileTest.exists?(@pid) then
+								self.log("Starting process with PID #{$$}", {:prefix => ["WORKER", "START"]})
+					      File.open(@pid, "w") {|f| f.write($$) }
+					      self.handle_plain
+					    end
+					  end
 				
-				  PhusionPassenger.on_event(:stopping_worker_process) do
-				    if FileTest.exists?(@pid) then
-				      if File.open(@pid, "r") {|f| pid = f.read.to_i} == $$ then
-								self.log("Stopped process with PID #{$$}", {:prefix => ["WORKER", "STOP"]})
-				        File.delete(@pid)
-				      end
-				    end
-				  end						
+					  PhusionPassenger.on_event(:stopping_worker_process) do
+					    if FileTest.exists?(@pid) then
+					      if File.open(@pid, "r") {|f| pid = f.read.to_i} == $$ then
+									self.log("Stopped process with PID #{$$}", {:prefix => ["WORKER", "STOP"]})
+					        File.delete(@pid)
+					      end
+					    end
+					  end						
+					else
+						self.handle_plain
+					end
 				end
 				
 				def handle_plain
 					@application.load_tasks
 					@definitions.call(self)
-				end
+				end				
 				
-				def self.start(application_class, log_file, pid_file, &definitions)
-					self.new(application_class, log_file, pid_file, definitions).execute
+				def method_missing(method, *args, &block)  
+					self.scheduler.send(method, *args, &block)
 				end
       end
     end
