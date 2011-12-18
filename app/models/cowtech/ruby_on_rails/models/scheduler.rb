@@ -18,6 +18,12 @@ module Cowtech
 					self.new(application_class, log_file, pid_file, definitions).execute
 				end
 				
+				def self.log(msg)
+					puts msg
+					#@@class_logger ||= Logger.new(Rails.root.to_s + "/log/scheduler.log")
+					#@@class_logger.debug(msg)				
+				end
+				
 				def initialize(application_class, log_file, pid_file, block = nil, &definitions)
 					@application = application_class
 					@logger = Logger.new(log_file)
@@ -30,9 +36,8 @@ module Cowtech
 				def log_string(message, options = {})
 					rv = ""
 					
-					rv += "[#{Time.now.strftime("%Y-%m-%d %T")}]" if !options[:no_time]
-					prefix = options[:prefix].ensure_array.collect {|p| "[" + p.center(6, " ") + "]" }.join(" ")
-					rv += " #{prefix} " if prefix.present?
+					rv += "[#{Time.now.strftime("%Y-%m-%d %T")}] " if !options[:no_time]
+					rv += options[:prefix].ensure_array.collect {|p| "[" + p.center(6, " ") + "]" }.join(" ")  + " " if options[:prefix].present?
 					rv += message
 					
 					rv
@@ -44,14 +49,17 @@ module Cowtech
 					(options[:logger] || @logger).send(type, msg)
 				end
 				
-				def execute_rake_task(label, name, args = nil)
+				def execute_rake_task(label, name, args)
 					begin
+						args = args.symbolize_keys
 						args_string = args.present? ? " with arguments #{args.to_json}" : ""
 
-						self.log(label + args_string + " ...", {:prefix => ["RAKE", "START", name]})
 						task = Rake::Task[name]
+						values = task.arg_names.collect {|a| args[a.to_sym] }
+
+						self.log(label + args_string + " ...", {:prefix => ["RAKE", "START", name]})
 						task.reenable
-						task.invoke(args)
+						task.invoke(*values)
 						self.log("Rake task ended.", {:prefix => ["RAKE", "END", name]})
 					rescue Exception => e
 						self.log("Rake task failed with exception: [#{e.class.to_s}] #{e.to_s}.", {:prefix => ["RAKE", "ERROR", name]})

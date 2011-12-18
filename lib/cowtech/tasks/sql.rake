@@ -12,7 +12,7 @@ module Cowtech
 
       def self.run_command(cmd); system(cmd) end
 
-      def self.mysql_execute(config, task_args)
+      def self.mysql_execute(config, rake_args)
         dest_file = Rails.root + "backups/mysql/mysql-#{Time.now.strftime("%Y%m%d-%H%M%S")}.sql"
     		final_file = dest_file.to_s + "." + @@log_compressed_extension
 		
@@ -34,20 +34,20 @@ module Cowtech
         FileUtils.mkdir_p(dir) if !File.directory?(dir)
     
         # Execute command
-        puts "\tDumping data ..."
+        Cowtech::RubyOnRails::Models::Scheduler.log "\tDumping data ..."
         Cowtech::RubyOnRails::MysqlUtils.run_command(dump_cmd + " " + dump_args.values.join(" "))
     
         # Compress
-        puts "\tCompressing backup ..."
+        Cowtech::RubyOnRails::Models::Scheduler.log "\tCompressing backup ..."
         Cowtech::RubyOnRails::MysqlUtils.run_command(@@log_compressor_command + " " + dest_file.to_s)
     
         # Send file via mail
-				if Rails.env == "production" && task_args[:email_class].present? then
-					puts "\tForwarding backup file to requested email address..."
-        	task_args[:email_class].constantize.backup(final_file).deliver
+				if (Rails.env == "production" || rake_args["force"].to_boolean) && rake_args["email_class"].present? then
+					Cowtech::RubyOnRails::Models::Scheduler.log "\tForwarding backup file to requested email address..."
+        	rake_args["email_class"].constantize.backup(final_file).deliver
 				end
 
-        puts "Backup saved in #{final_file}"
+        Cowtech::RubyOnRails::Models::Scheduler.log "Backup saved in #{final_file}"
       end
 
       # ALIAS
@@ -61,12 +61,12 @@ module Cowtech
       @@log_compressed_extension = "bz2"
 
       def self.to_fixtures
-        puts "--- Dumping database into fixtures ..."
+        Cowtech::RubyOnRails::Models::Scheduler.log "--- Dumping database into fixtures ..."
         sql = "SELECT * FROM %s" 
         skip_tables = ["schema_info"] 
         ActiveRecord::Base.establish_connection 
         (ActiveRecord::Base.connection.tables - skip_tables).each do |table_name| 
-          puts "--- --- Dumping table #{table_name} ..."
+          Cowtech::RubyOnRails::Models::Scheduler.log "--- --- Dumping table #{table_name} ..."
           i = "01" 
           File.open("#{RAILS_ROOT}/test/fixture/#{table_name}.yml", 'w') do |file| 
             data = ActiveRecord::Base.connection.select_all(sql % table_name) 
@@ -78,22 +78,22 @@ module Cowtech
         end 
       end
 
-      def self.backup(args)
-        puts "--- Backupping database ..."
+      def self.backup(rake_args)
+        Cowtech::RubyOnRails::Models::Scheduler.log "--- Backupping database ..."
         # OTTENIAMO LA CONFIGURAZIONE
         db_config = YAML.load_file(Rails.root + "config/database.yml")
         env = Rails.env
 
         # ESEGUIAMO
-        Cowtech::RubyOnRails::MysqlUtils.send("#{db_config[env]["adapter"]}_execute", db_config[env], args)
+        Cowtech::RubyOnRails::MysqlUtils.send("#{db_config[env]["adapter"]}_execute", db_config[env], rake_args)
       end
 
       def self.backup_clean
-        puts "--- Cleaning database backup files ..."
+        Cowtech::RubyOnRails::Models::Scheduler.log "--- Cleaning database backup files ..."
 
         ["backups/mysql/*.sql", "backups/mysql/backup/*.#{@@log_compressed_extension}"].each do |path|
           Dir.glob(Rails.root + path) do |log_file|
-            puts "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
+            Cowtech::RubyOnRails::Models::Scheduler.log "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
             File.delete(log_file)
           end
         end
@@ -109,7 +109,7 @@ namespace :mysql do
   end 
   
   desc "Backups database"
-  task :backup, [:email_class] => [:environment] do |task, args|
+  task :backup, [:email_class, :force] => [:environment] do |task, args|
     Cowtech::RubyOnRails::SqlUtils.backup(args)
   end
   

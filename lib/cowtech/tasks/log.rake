@@ -17,16 +17,16 @@ module Cowtech
       def self.run_command(cmd)
         IO.popen(cmd) do |f| print f.gets end
       end
-  
-      def self.rotate(args)
-        puts "Rotating log files..."
+
+      def self.rotate(rake_args)
+        Cowtech::RubyOnRails::Models::Scheduler.log "Rotating log files..."
     
         # Get timestamp
         tstamp = Time.now.strftime("%Y%m%d")
 
         # For each log file
         Dir.glob(Rails.root + "log/*.log") do |log_file|
-          puts "\tRotating #{log_file} ..."
+          Cowtech::RubyOnRails::Models::Scheduler.log "\tRotating #{log_file} ..."
           new_name = "#{File.basename(log_file)}-#{tstamp}" # CREIAMO IL NOME
       
           # Resolv duplicates
@@ -42,9 +42,9 @@ module Cowtech
           FileUtils.mkdir_p(dir) if !File.directory?(dir)
       
           # Send file via mail
-					if Rails.env == "production" && args[:email_class].present? then
-						puts "\tForwarding log file to requested email address..."
-	        	args[:email_class].constantize.log_report(log_file).deliver
+					if (Rails.env == "production" || rake_args["force"].to_boolean) && rake_args["email_class"].present? then
+						Cowtech::RubyOnRails::Models::Scheduler.log "\tForwarding log file to requested email address..."
+	        	rake_args["email_class"].constantize.log_report(log_file).deliver
 					end
 
           # Copy file
@@ -55,18 +55,18 @@ module Cowtech
         end
     
         # Truncate files
-        puts "Truncating current log files ..."
+        Cowtech::RubyOnRails::Models::Scheduler.log "Truncating current log files ..."
         Dir.glob(Rails.root + "log/*.log") do |log_file|
           File.open(log_file, "w").close
         end
       end
   
       def self.clean
-        puts "Cleaning log files..."
+        Cowtech::RubyOnRails::Models::Scheduler.log "Cleaning log files..."
   
         ["backups/logs/*.log", "backups/logs/*.#{@@log_compressed_extension}"].each do |path|
           Dir.glob(Rails.root + path) do |log_file|
-            puts "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
+            Cowtech::RubyOnRails::Models::Scheduler.log "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
             File.delete(log_file)
           end
         end
@@ -77,7 +77,7 @@ end
 
 namespace :log do
   desc "Rotates log files"
-  task :rotate, [:email_class] => [:environment] do |task, args|
+  task :rotate, [:email_class, :force] => [:environment] do |task, args|
     Cowtech::RubyOnRails::LogUtils.rotate(args)
   end
   
