@@ -10,8 +10,7 @@ require 'rake'
 require 'cowtech-extensions'
 require 'cowtech/extensions'
 require 'cowtech/monkey_patches'
-#require dir + '/../app/models/e_mail'
-#require dir + '/../app/models/model_base'
+require 'cowtech/scheduler'
 
 module Cowtech
   class Engine < Rails::Engine
