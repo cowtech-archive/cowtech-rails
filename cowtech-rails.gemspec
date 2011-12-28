@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "cowtech-rails"
-  s.version = "2.5.1.0"
+  s.version = "2.6.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shogun"]
-  s.date = "2011-12-18"
+  s.date = "2011-12-28"
   s.description = "A general purpose Rails utility plugin."
   s.email = "shogun_panda@me.com"
   s.extra_rdoc_files = [
@@ -27,10 +27,10 @@ Gem::Specification.new do |s|
     "app/models/cowtech/ruby_on_rails/models/mongoid/cowtech.rb",
     "app/models/cowtech/ruby_on_rails/models/mongoid/logging.rb",
     "app/models/cowtech/ruby_on_rails/models/mongoid/sequence.rb",
-    "app/models/cowtech/ruby_on_rails/models/scheduler.rb",
     "lib/cowtech.rb",
     "lib/cowtech/extensions.rb",
     "lib/cowtech/monkey_patches.rb",
+    "lib/cowtech/scheduler.rb",
     "lib/cowtech/tasks/app.rake",
     "lib/cowtech/tasks/log.rake",
     "lib/cowtech/tasks/mongodb.rake",
