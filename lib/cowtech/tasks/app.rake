@@ -18,7 +18,8 @@ module Cowtech
 
       def self.set_version(info)
         puts "--- Setting application version ..."
-        File.open(Rails.root + "config/application_info.yml", "w") do |f| f.write(info.to_yaml) end
+				version = Cowtech::RubyOnRails::AppUtils.get_version(false)
+        File.open(Rails.root + "config/application_info.yml", "w") do |f| f.write(version.merge(info.stringify_keys).to_yaml) end
         puts Cowtech::RubyOnRails::AppUtils.get_version
       end
 
