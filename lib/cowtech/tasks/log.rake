@@ -19,14 +19,14 @@ module Cowtech
       end
 
       def self.rotate(rake_args)
-        Cowtech::RubyOnRails::Models::Scheduler.log "Rotating log files..."
+        Cowtech::RubyOnRails::Scheduler.log "Rotating log files..."
     
         # Get timestamp
         tstamp = Time.now.strftime("%Y%m%d")
 
         # For each log file
         Dir.glob(Rails.root + "log/*.log") do |log_file|
-          Cowtech::RubyOnRails::Models::Scheduler.log "\tRotating #{log_file} ..."
+          Cowtech::RubyOnRails::Scheduler.log "\tRotating #{log_file} ..."
           new_name = "#{File.basename(log_file)}-#{tstamp}" # CREIAMO IL NOME
       
           # Resolv duplicates
@@ -43,7 +43,7 @@ module Cowtech
       
           # Send file via mail
 					if (Rails.env == "production" || rake_args["force"].to_boolean) && rake_args["email_class"].present? then
-						Cowtech::RubyOnRails::Models::Scheduler.log "\tForwarding log file to requested email address..."
+						Cowtech::RubyOnRails::Scheduler.log "\tForwarding log file to requested email address..."
 	        	rake_args["email_class"].constantize.log_report(log_file).deliver
 					end
 
@@ -55,18 +55,18 @@ module Cowtech
         end
     
         # Truncate files
-        Cowtech::RubyOnRails::Models::Scheduler.log "Truncating current log files ..."
+        Cowtech::RubyOnRails::Scheduler.log "Truncating current log files ..."
         Dir.glob(Rails.root + "log/*.log") do |log_file|
           File.open(log_file, "w").close
         end
       end
   
       def self.clean
-        Cowtech::RubyOnRails::Models::Scheduler.log "Cleaning log files..."
+        Cowtech::RubyOnRails::Scheduler.log "Cleaning log files..."
   
         ["backups/logs/*.log", "backups/logs/*.#{@@log_compressed_extension}"].each do |path|
           Dir.glob(Rails.root + path) do |log_file|
-            Cowtech::RubyOnRails::Models::Scheduler.log "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
+            Cowtech::RubyOnRails::Scheduler.log "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
             File.delete(log_file)
           end
         end

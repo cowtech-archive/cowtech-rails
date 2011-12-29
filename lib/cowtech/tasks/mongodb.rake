@@ -12,7 +12,7 @@ module Cowtech
       def self.run_command(cmd); system(cmd) end
 
       def self.backup(rake_args)
-        Cowtech::RubyOnRails::Models::Scheduler.log "--- Backupping MongoDB ..."
+        Cowtech::RubyOnRails::Scheduler.log "--- Backupping MongoDB ..."
         
         # Get configuration
         mongo_config = YAML.load_file(Rails.root + "config/mongoid.yml")
@@ -28,36 +28,36 @@ module Cowtech
         FileUtils.mkdir_p(dir) if !File.directory?(dir)
         
         databases.each do |db|
-          Cowtech::RubyOnRails::Models::Scheduler.log "\t\tBackupping DB #{db} ..."
+          Cowtech::RubyOnRails::Scheduler.log "\t\tBackupping DB #{db} ..."
 
           dump_cmd = "mongodump"
           dump_args = {"" => "-o \"#{dest_file}\"", "database" => "-d #{db}"}
 
           # Execute command
-          Cowtech::RubyOnRails::Models::Scheduler.log "\t\tDumping data ..."
+          Cowtech::RubyOnRails::Scheduler.log "\t\tDumping data ..."
           Cowtech::RubyOnRails::MongoUtils.run_command(dump_cmd + " " + dump_args.values.join(" "))
         end
         
         # Compress
-        Cowtech::RubyOnRails::Models::Scheduler.log "\t\tCompressing backup ..."
+        Cowtech::RubyOnRails::Scheduler.log "\t\tCompressing backup ..."
         Cowtech::RubyOnRails::MongoUtils.run_command(@@log_compressor_command + " " + final_file + " " + dest_file.to_s)
         FileUtils.rm_rf(dest_file.to_s)
  
         # Send file via mail
 				if (Rails.env == "production" || rake_args["force"].to_boolean) && rake_args["email_class"].present? then
-					Cowtech::RubyOnRails::Models::Scheduler.log "\tForwarding backup file to requested email address..."
+					Cowtech::RubyOnRails::Scheduler.log "\tForwarding backup file to requested email address..."
         	rake_args["email_class"].constantize.backup(final_file).deliver
 				end
 
-        Cowtech::RubyOnRails::Models::Scheduler.log "Backup saved in #{dest_file}.#{@@log_compressed_extension}"
+        Cowtech::RubyOnRails::Scheduler.log "Backup saved in #{dest_file}.#{@@log_compressed_extension}"
       end
 
       def self.backup_clean
-        Cowtech::RubyOnRails::Models::Scheduler.log "--- Cleaning database backup files ..."
+        Cowtech::RubyOnRails::Scheduler.log "--- Cleaning database backup files ..."
 
         ["backups/mysql/*.sql", "backups/mysql/backup/*.#{@@log_compressed_extension}"].each do |path|
           Dir.glob(Rails.root + path) do |log_file|
-            Cowtech::RubyOnRails::Models::Scheduler.log "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
+            Cowtech::RubyOnRails::Scheduler.log "\tDeleting #{log_file.gsub(Rails.root.to_s + "/", "")} ..."
             File.delete(log_file)
           end
         end
