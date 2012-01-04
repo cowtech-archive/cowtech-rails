@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "cowtech-rails"
-  s.version = "2.6.0.2"
+  s.version = "2.7.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shogun"]
-  s.date = "2011-12-29"
+  s.date = "2012-01-04"
   s.description = "A general purpose Rails utility plugin."
   s.email = "shogun_panda@me.com"
   s.extra_rdoc_files = [
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
     "app/helpers/cowtech/ruby_on_rails/helpers/application_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/ar_crud_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/browser_helper.rb",
+    "app/helpers/cowtech/ruby_on_rails/helpers/debug_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/format_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/mongoid_crud_helper.rb",
     "app/helpers/cowtech/ruby_on_rails/helpers/validation_helper.rb",
