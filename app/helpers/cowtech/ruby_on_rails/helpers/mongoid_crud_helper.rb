@@ -122,21 +122,25 @@ module Cowtech
             expr = self.mongo_parse_search(search_query)
 
             # Build the query
+						or_query = []
             (args[:fields] || []).each do |field|
-              @mongo_query = @mongo_query.any_of(field.to_sym => Regexp.new(expr, Regexp::EXTENDED | Regexp::MULTILINE | Regexp::IGNORECASE))
+              or_query << {field.to_sym => Regexp.new(expr, Regexp::EXTENDED | Regexp::MULTILINE | Regexp::IGNORECASE)}
             end
 
             # Now add external fields
             # TODO: Can we enhance this?
             (args[:external] || []).each do |external|
               external_query = external[:class].not_deleted
+							eor_query = []
               (external[:fields] || []).each do |field|
-                external_query = external_query.any_of(field.to_sym => Regexp.new(expr, Regexp::EXTENDED | Regexp::MULTILINE | Regexp::IGNORECASE))
+                eor_query << {field.to_sym => Regexp.new(expr, Regexp::EXTENDED | Regexp::MULTILINE | Regexp::IGNORECASE)}
               end
 
-              ids = external_query.only(:id).all.collect {|r| r.id }
-              @mongo_query = @mongo_query.any_of(:cliente_id.in => ids) if ids.count > 0
+              ids = external_query.any_of(eor_query).only(:id).all.collect {|r| r.id }
+              or_query << {external[:foreign_key].in => ids} if ids.count > 0
             end    
+
+						@mongo_query = @mongo_query.any_of(or_query)						
           end
 
           @mongo_query
