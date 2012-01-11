@@ -11,11 +11,11 @@ module Cowtech
       @@log_compressed_extension = "bz2"
 
       def self.generate_new_name(base, i = 0)
-        (Rails.root + "backups/logs/#{base}#{if i > 0 then "-#{i}" else "" end}").to_s  
+        (Rails.root + "backups/logs/#{base}#{i > 0 ? "-#{i}" : ""}").to_s  
       end
 
       def self.run_command(cmd)
-        IO.popen(cmd) do |f| print f.gets end
+        IO.popen(cmd) { |f| print f.gets }
       end
 
       def self.rotate(rake_args)

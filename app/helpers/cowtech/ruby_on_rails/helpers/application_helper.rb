@@ -48,7 +48,7 @@ module Cowtech
         end
         
         def get_param(key, default = nil)
-          if params[key].blank? then default else params[key] end
+          params[key].blank? ? default : params[key]
         end
 
         def _normalize_type(format = nil)

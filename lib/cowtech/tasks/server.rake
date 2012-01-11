@@ -24,18 +24,18 @@ module Cowtech
 
       def self.save_config(args = nil)
         args = Cowtech::RubyOnRails::ServerUtils.load_config if !args
-        File.open(Rails.root + @@yml_path, "w") do |f| f.write(YAML::dump(args)) end
+        File.open(Rails.root + @@yml_path, "w") { |f| f.write(YAML::dump(args)) }
       end
 
       def self.stringify_keys(hash)
         rv = {}
-        hash.each do |k, v| rv[k.to_s] = v end
+        hash.each { |k, v| rv[k.to_s] = v }
         rv
       end
 
       def self.merge(base, other)
         rv = {}
-        base.each do |k, v| rv[k] = if other[k] then other[k] else v end end
+        base.each { |k, v| rv[k] = (other[k] ? other[k] : v)  }
         rv
       end
 

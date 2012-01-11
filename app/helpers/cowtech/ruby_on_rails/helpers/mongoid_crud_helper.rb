@@ -69,7 +69,7 @@ module Cowtech
             if condition.is_a?(Hash) then
               condition.each_pair do |key, val|
                 if key == "$or" then
-                  @mongo_query = @mongo_query.any_of(val)
+                  @mongo_query = @mongo_query.any_of(val) # TODO: This don't work as expected. See: https://github.com/mongoid/mongoid/issues/569
                 else
                   @mongo_query = @mongo_query.where({key => val})
                 end                 
@@ -86,7 +86,7 @@ module Cowtech
             # Operate on parenthesis. If unbalanced, no substitution is done
             if search.gsub(/[^(]/mi, "").strip.length == search.gsub(/[^)]/mi, "").strip.length then
               # Split token
-              search = search.split(/(\s(AND|OR)\s)|([\(\)])/).select{|t| !t.empty? && t !~ /^(AND|OR)$/}
+              search = search.split(/(\s(AND|OR)\s)|([\(\)])/).select{ |t| !t.empty? && t !~ /^(AND|OR)$/}
 
               # Replace tokens
               search = search.collect { |token|
@@ -128,7 +128,6 @@ module Cowtech
             end
 
             # Now add external fields
-            # TODO: Can we enhance this?
             (args[:external] || []).each do |external|
               external_query = external[:class].not_deleted
 							eor_query = []
@@ -136,7 +135,7 @@ module Cowtech
                 eor_query << {field.to_sym => Regexp.new(expr, Regexp::EXTENDED | Regexp::MULTILINE | Regexp::IGNORECASE)}
               end
 
-              ids = external_query.any_of(eor_query).only(:id).all.collect {|r| r.id }
+              ids = external_query.any_of(eor_query).only(:id).all.collect { |r| r.id }
               or_query << {external[:foreign_key].in => ids} if ids.count > 0
             end    
 
@@ -207,7 +206,7 @@ module Cowtech
 
         def mongo_update_params(args = {})
           blacklist = self.mongo_update_params_black_list(args)
-          session["params-#{self.location_name}"] = (params.delete_if {|k,v| blacklist.include?(k) || params[k].is_a?(Tempfile) || params[k].blank?})
+          session["params-#{self.location_name}"] = (params.delete_if { |k,v| blacklist.include?(k) || params[k].is_a?(Tempfile) || params[k].blank?})
         end
 
         def mongo_end_write_action(args = {})

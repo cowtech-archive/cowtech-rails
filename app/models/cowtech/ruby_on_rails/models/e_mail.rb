@@ -41,7 +41,7 @@ module Cowtech
           end
           
           # OTTENIAMO GLI ARGOMENTI
-          args = (if args.is_a?(Hash) then args else args[0] end).delete_if { |k,v| v.blank? }
+          args = (args.is_a?(Hash) ? args : args[0]).delete_if { |k,v| v.blank? }
 
           # AGGIUSTIAMO REPLY TO
           args[:reply_to] = args[:from] if !args[:reply_to]
@@ -52,10 +52,10 @@ module Cowtech
 
           mail(args) do |format|
             if plain_body then # SE C'E' PLAIN BODY
-              format.text do render :text => plain_body end
+              format.text { render :text => plain_body }
             end
             if html_body then # SE C'E' HTML
-              format.html do render :text => html_body end
+              format.html { render :text => html_body }
             end
           end
         end

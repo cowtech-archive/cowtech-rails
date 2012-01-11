@@ -83,7 +83,7 @@ module Cowtech
           self.crud_query_initialize(data) if !data[:query_initialized]
           query = data[:query_expr] if !query
 
-          query.count.times do |i| query[i] = "(#{query[i]})" end
+          query.count.times { |i| query[i] = "(#{query[i]})" }
           query.join(" AND ")
         end
 
@@ -98,7 +98,7 @@ module Cowtech
           self.crud_query_initialize(data) if !data[:query_initialized]
 
           expr = [expr] if !expr.respond_to?(:each)    
-          expr.each do |e| data[:query_expr] << e end
+          expr.each { |e| data[:query_expr] << e }
 
           data[:query_params].merge!(params)
         end
@@ -155,7 +155,7 @@ module Cowtech
             # BUILD QUERY
             data[:query_params].merge!(parameters)
             search_query = []
-            fields.each do |field| search_query << "(#{search.gsub("@FIELD@", "#{self.crud_get_class(data).table_name}.#{field.to_s}")})" end
+            fields.each { |field| search_query << "(#{search.gsub("@FIELD@", "#{self.crud_get_class(data).table_name}.#{field.to_s}")})" }
 
             # ADD OPTIONAL DATA
             if externals then
@@ -164,7 +164,7 @@ module Cowtech
     
                 if !external[:manual] then
                   external_conds = []
-                  external.fetch(:fields, []).each do |external_field| external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" end
+                  external.fetch(:fields, []).each { |external_field| external_conds << "(#{search.gsub("@FIELD@", "#{external[:table]}.#{external_field.to_s}")})" }
                   external_field = external.fetch(:external_field, "id")
                   external_query = "(#{external.fetch(:field, "id")} IN (SELECT #{external.fetch(:external_field, "id")} FROM #{external[:table]} WHERE #{external_conds.join(" OR ")}))" 
                 else
@@ -211,12 +211,12 @@ module Cowtech
         end
 
         def crud_form_submit_label
-          if self.crud_get_form_data.new_record? then "Create" else "Edit" end
+          self.crud_get_form_data.new_record? ? "Create" : "Edit"
         end
 
         def crud_get_page_param(key = :page, upperbound = -1)
           page = params[key]
-          page = if params[key].is_valid_integer? then params[key].to_integer else 1 end
+          page = params[key].is_valid_integer? ? params[key].to_integer : 1
           page = 1 if page < 1
           page = upperbound if (upperbound > 0 && page > upperbound)
           page
@@ -242,7 +242,7 @@ module Cowtech
           bounds = OpenStruct.new({:total => 0, :first => 0, :last => 0, :pages => 0, :page => 1, :per_page => 1})
 
           if records != nil && records.count > 0 then
-            per_page = (if per_page.is_valid_integer? then per_page else records[0].class.per_page end).to_integer
+            per_page = (per_page.is_valid_integer? ? per_page : records[0].class.per_page).to_integer
             per_page = records.count if per_page < 1
             bounds.total = records.count
             bounds.per_page = per_page
@@ -260,7 +260,7 @@ module Cowtech
 
         def crud_update_params
           blacklist = ["controller", "action", "id"]
-          session["params-#{self.location_name}"] = (params.delete_if {|k,v| blacklist.include?(k) || params[k].is_a?(Tempfile)})
+          session["params-#{self.location_name}"] = (params.delete_if { |k,v| blacklist.include?(k) || params[k].is_a?(Tempfile)})
         end
 
         def crud_end_write_action(additional = nil, absolute = false)
@@ -276,7 +276,7 @@ module Cowtech
           end
 
           if additional != nil then
-            additional.each do |k, v| rp[k] = v end
+            additional.each { |k, v| rp[k] = v }
           end
 
           url_for(rp)

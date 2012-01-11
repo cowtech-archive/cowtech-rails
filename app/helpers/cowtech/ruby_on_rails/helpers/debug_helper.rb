@@ -31,7 +31,7 @@ module Cowtech
 					
 					final_msg = []					
 					final_msg << self.debug_timestamp if !no_timestamp
-					tags.collect {|tag| "[" + tag + "]" }.each { |tag| final_msg << tag } if tags.present?
+					tags.collect { |tag| "[" + tag + "]" }.each { |tag| final_msg << tag } if tags.present?
 					final_msg << msg					
 					final_msg = final_msg.join(" ")
 					

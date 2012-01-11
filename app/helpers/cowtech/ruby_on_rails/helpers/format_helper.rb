@@ -14,7 +14,7 @@ module Cowtech
           elsif field.is_a?(Float) then
             field.format_number
           elsif field.blank? || field.strip.blank? then
-            (if default then default else "Not set" end)
+            (default ? default : "Not set")
           else
             field
           end
@@ -35,7 +35,7 @@ module Cowtech
         end
 
         def text_class(val, additional = nil)
-          "class=\"text #{if additional.blank? then nil else additional end} #{if val.blank? then "unset" else nil end}\""
+          "class=\"text #{additional.blank? ? nil : additional} #{val.blank? ? "unset" : nil}\""
         end
       end
     end

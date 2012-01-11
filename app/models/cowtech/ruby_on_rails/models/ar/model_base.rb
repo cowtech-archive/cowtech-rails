@@ -27,7 +27,7 @@ module Cowtech
             end
         
             def safe_id
-              if self.id then self.id else 0 end
+              self.id || 0
             end
         
             def editable?(user = nil)

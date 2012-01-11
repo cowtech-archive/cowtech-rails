@@ -8,18 +8,18 @@ module Cowtech
   module RubyOnRails
     class AppUtils
       def self.run_command(cmd)
-        IO.popen(cmd, "r") do |f| puts f.gets end
+        IO.popen(cmd, "r") { |f| puts f.gets }
       end
 
       def self.get_version(as_string = true)
         info = YAML.load_file(Rails.root + "config/application_info.yml")
-        (if as_string then "Current application info --- Version #{info["version"]} - Release date: #{info["release-date"]}" else info end)
+        (as_string ? "Current application info --- Version #{info["version"]} - Release date: #{info["release-date"]}" : info)
       end
 
       def self.set_version(info)
         puts "--- Setting application version ..."
 				version = Cowtech::RubyOnRails::AppUtils.get_version(false)
-        File.open(Rails.root + "config/application_info.yml", "w") do |f| f.write(version.merge(info.stringify_keys).to_yaml) end
+        File.open(Rails.root + "config/application_info.yml", "w") { |f| f.write(version.merge(info.stringify_keys).to_yaml) }
         puts Cowtech::RubyOnRails::AppUtils.get_version
       end
 

@@ -36,7 +36,7 @@ module Cowtech
 				rv = ""
 				
 				rv += "[#{Time.now.strftime("%Y-%m-%d %T")}] " if !options[:no_time]
-				rv += options[:prefix].ensure_array.collect {|p| "[" + p.center(6, " ") + "]" }.join(" ")  + " " if options[:prefix].present?
+				rv += options[:prefix].ensure_array.collect { |p| "[" + p.center(6, " ") + "]" }.join(" ")  + " " if options[:prefix].present?
 				rv += message
 				
 				rv
@@ -54,7 +54,7 @@ module Cowtech
 					args_string = args.present? ? " with arguments #{args.to_json}" : ""
 
 					task = Rake::Task[name]
-					values = task.arg_names.collect {|a| args[a.to_sym] }
+					values = task.arg_names.collect { |a| args[a.to_sym] }
 
 					self.log(label + args_string + " ...", {:prefix => ["RAKE", "START", name]})
 					task.reenable
@@ -87,14 +87,14 @@ module Cowtech
 				  PhusionPassenger.on_event(:starting_worker_process) do |forked|
 				    if forked && !FileTest.exists?(@pid) then
 							self.log("Starting process with PID #{$$}", {:prefix => ["WORKER", "START"]})
-				      File.open(@pid, "w") {|f| f.write($$) }
+				      File.open(@pid, "w") { |f| f.write($$) }
 				      self.handle_plain
 				    end
 				  end
 			
 				  PhusionPassenger.on_event(:stopping_worker_process) do
 				    if FileTest.exists?(@pid) then
-				      if File.open(@pid, "r") {|f| pid = f.read.to_i} == $$ then
+				      if File.open(@pid, "r") { |f| pid = f.read.to_i} == $$ then
 								self.log("Stopped process with PID #{$$}", {:prefix => ["WORKER", "STOP"]})
 				        File.delete(@pid)
 				      end
