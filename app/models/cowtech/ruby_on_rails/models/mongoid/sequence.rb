@@ -24,7 +24,7 @@ module Cowtech
             def sequence(_field)
               # REPLACE FIELD DEFAULT VALUE
               _field = _field.to_s
-              field(_field, fields[_field].options.merge(:default => lambda{ set_from_sequence(_field)}))
+							field(_field, fields[_field].options.merge(:default => lambda{ self.class.set_from_sequence(_field)}))
             end
       
             def set_from_sequence(_field)
