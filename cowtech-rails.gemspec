@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "cowtech-rails"
-  s.version = "2.8.0.0"
+  s.version = "2.8.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shogun"]
-  s.date = "2012-01-11"
+  s.date = "2012-02-01"
   s.description = "A general purpose Rails utility plugin."
   s.email = "shogun_panda@me.com"
   s.extra_rdoc_files = [
@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/ShogunPanda/cowtech-rails"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.11"
+  s.rubygems_version = "1.8.15"
   s.summary = "A general purpose Rails utility plugin."
 
   if s.respond_to? :specification_version then
