@@ -8,8 +8,14 @@ module Cowtech
 	module RubyOnRails
 		module Models
 			class EMail < ActionMailer::Base
-				def self.setup(method = :smtp, file = nil)
-					rv = YAML.load_file(file || (Rails.root + "config/email.yml"))
+				def self.setup(method = :smtp, file = nil, raise_config_errors = true)
+					begin
+						rv = YAML.load_file(file || (Rails.root + "config/email.yml"))
+					rescue Exception => e
+						raise e if raise_config_errors
+						rv = {}
+					end
+
 
 					ActionMailer::Base.raise_delivery_errors = true
 					ActionMailer::Base.delivery_method = method
@@ -24,8 +30,8 @@ module Cowtech
 					rv
 				end
 
-				def setup(method = :smtp, file = nil)
-					@configuration ||= EMail.setup(method, file)
+				def setup(method = :smtp, file = nil, raise_config_errors = true)
+					@configuration ||= EMail.setup(method, file, raise_config_errors)
 				end
 
 				def generic(args)
