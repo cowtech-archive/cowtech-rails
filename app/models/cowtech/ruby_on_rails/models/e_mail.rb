@@ -8,14 +8,19 @@ module Cowtech
 	module RubyOnRails
 		module Models
 			class EMail < ActionMailer::Base
-				def self.setup(method = :smtp, file = nil, raise_config_errors = true)
-					begin
-						rv = YAML.load_file(file || (Rails.root + "config/email.yml"))
-					rescue Exception => e
-						raise e if raise_config_errors
-						rv = {}
-					end
+				def self.setup(method = :smtp, config = nil, raise_config_errors = true)
+					rv = {}
 
+					if config.is_a?(Hash) then
+						rv = config
+					else
+						begin
+							rv = YAML.load_file(config || (Rails.root + "config/email.yml"))
+						rescue Exception => e
+							raise e if raise_config_errors
+							rv = {}
+						end
+					end
 
 					ActionMailer::Base.raise_delivery_errors = true
 					ActionMailer::Base.delivery_method = method
@@ -30,17 +35,17 @@ module Cowtech
 					rv
 				end
 
-				def setup(method = :smtp, file = nil, raise_config_errors = true)
-					@configuration ||= EMail.setup(method, file, raise_config_errors)
+				def setup(method = :smtp, config = nil, raise_config_errors = true)
+					@configuration ||= EMail.setup(method, config, raise_config_errors)
 				end
 
 				def generic(args)
 					# Load configuration
 					if !@configuration then
-						conf = args.delete(:configuration)
+						config = args.delete(:configuration)
 
-						if conf then
-							@configuration = conf
+						if config.is_a?(Hash) then
+							self.setup(config[:method] || args.delete(:method) || :smtp, config)
 						else
 							self.setup(args.delete(:method) || :smtp, args.delete(:configuration_file))
 						end
