@@ -4,24 +4,24 @@
 # Licensed under the MIT license, which can be found at http://www.opensource.org/licenses/mit-license.php.
 #
 
-dir = File.dirname(__FILE__) 
+dir = File.dirname(__FILE__)
 
-require 'rake'
-require 'cowtech-extensions'
-require 'cowtech/extensions'
-require 'cowtech/monkey_patches'
-require 'cowtech/scheduler'
+require "rake"
+require "cowtech-extensions"
+require "cowtech/extensions"
+require "cowtech/monkey_patches"
+require "cowtech/scheduler"
 
 module Cowtech
-  class Engine < Rails::Engine
-    rake_tasks do
-      load "cowtech/tasks/app.rake"
-      load "cowtech/tasks/log.rake"
-      load "cowtech/tasks/server.rake"
-      load "cowtech/tasks/sql.rake"
-      load "cowtech/tasks/mongodb.rake"
-    end
-  end
+	class Engine < Rails::Engine
+		rake_tasks do
+			load "cowtech/tasks/app.rake"
+			load "cowtech/tasks/log.rake"
+			load "cowtech/tasks/server.rake"
+			load "cowtech/tasks/sql.rake"
+			load "cowtech/tasks/mongodb.rake"
+		end
+	end
 end
 
 Cowtech::Extensions.load!

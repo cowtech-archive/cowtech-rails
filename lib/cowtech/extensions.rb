@@ -5,44 +5,44 @@
 #
 
 module SubdomainFu
-  def self.override_only_path?
-    true
-  end
+	def self.override_only_path?
+		true
+	end
 end
 
 module Cowtech
-  module RubyOnRails
-    module Extensions
-      module AR
-        extend ActiveSupport::Concern
-  
-        module ClassMethods
-          def find_or_create(oid, attributes = nil)
-            begin
-              self.find(oid)
-            rescue ActiveRecord::RecordNotFound
-              self.new(attributes)
-            end
-          end
+	module RubyOnRails
+		module Extensions
+			module AR
+				extend ActiveSupport::Concern
 
-          def safe_find(oid)
-            begin
-              rv = self.find(oid)
-            rescue ActiveRecord::RecordNotFound
-              nil
-            end
-          end
+				module ClassMethods
+					def find_or_create(oid, attributes = nil)
+						begin
+							self.find(oid)
+						rescue ActiveRecord::RecordNotFound
+							self.new(attributes)
+						end
+					end
 
-          def random
-            c = self.count
-            c != 0 ? self.find(:first, :offset => rand(c)) : nil
-          end
+					def safe_find(oid)
+						begin
+							rv = self.find(oid)
+						rescue ActiveRecord::RecordNotFound
+							nil
+						end
+					end
 
-          def per_page
-            25
-          end
-        end
-      end
-    end
-  end
+					def random
+						c = self.count
+						c != 0 ? self.find(:first, :offset => rand(c)) : nil
+					end
+
+					def per_page
+						25
+					end
+				end
+			end
+		end
+	end
 end

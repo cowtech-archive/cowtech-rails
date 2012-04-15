@@ -5,14 +5,13 @@
 #
 
 module Cowtech
-  module Rails
-    module Version
-      MAJOR = 2
-      MINOR = 8
-      PATCH = 1
-      BUILD = 0
+	module Rails
+		module Version
+			MAJOR = 2
+			MINOR = 8
+			PATCH = 2
 
-      STRING = [MAJOR, MINOR, PATCH, BUILD].compact.join('.')
-    end
-  end
+			STRING = [MAJOR, MINOR, PATCH].compact.join(".")
+		end
+	end
 end

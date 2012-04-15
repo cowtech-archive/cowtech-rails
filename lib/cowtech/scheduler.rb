@@ -5,24 +5,24 @@
 #
 
 module Cowtech
-  module RubyOnRails
-     class Scheduler
+	module RubyOnRails
+		class Scheduler
 			attr_accessor :application
 			attr_accessor :logger
 			attr_accessor :pid
 			attr_accessor :definitions
 			attr_accessor :scheduler
-			
+
 			def self.start(application_class, log_file, pid_file, &definitions)
 				self.new(application_class, log_file, pid_file, definitions).execute
 			end
-			
+
 			def self.log(msg)
 				puts msg
 				#@@class_logger ||= Logger.new(Rails.root.to_s + "/log/scheduler.log")
 				#@@class_logger.debug(msg)				
 			end
-			
+
 			def initialize(application_class, log_file, pid_file, block = nil, &definitions)
 				@application = application_class
 				@logger = Logger.new(log_file)
@@ -34,20 +34,20 @@ module Cowtech
 
 			def log_string(message, options = {})
 				rv = ""
-				
+
 				rv += "[#{Time.now.strftime("%Y-%m-%d %T")}] " if !options[:no_time]
 				rv += options[:prefix].ensure_array.collect { |p| "[" + p.center(6, " ") + "]" }.join(" ")  + " " if options[:prefix].present?
 				rv += message
-				
+
 				rv
 			end
-			
+
 			def log(message, options = {})
 				msg = self.log_string(message, options)
 				type = options[:type] || :info
 				(options[:logger] || @logger).send(type, msg)
 			end
-			
+
 			def execute_rake_task(label, name, args)
 				begin
 					args = args.symbolize_keys
@@ -64,7 +64,7 @@ module Cowtech
 					self.log("Rake task failed with exception: [#{e.class.to_s}] #{e.to_s}.", {:prefix => ["RAKE", "ERROR", name]})
 				end
 			end
-			
+
 			def execute_inline_task(label, name)
 				begin
 					self.log(label + " ...", {:prefix => ["INLINE", "START", name]})
@@ -79,44 +79,44 @@ module Cowtech
 				self.log("Scheduler started.", {:prefix => "MAIN"})
 				self.handle_plain
 			end
-			
+
 			def handle_phusion_passenger
 				if defined?(PhusionPassenger) then
 					File.delete(@pid) if FileTest.exists?(@pid)
-				
-				  PhusionPassenger.on_event(:starting_worker_process) do |forked|
-				    if forked && !FileTest.exists?(@pid) then
+
+					PhusionPassenger.on_event(:starting_worker_process) do |forked|
+						if forked && !FileTest.exists?(@pid) then
 							self.log("Starting process with PID #{$$}", {:prefix => ["WORKER", "START"]})
-				      File.open(@pid, "w") { |f| f.write($$) }
-				      self.handle_plain
-				    end
-				  end
-			
-				  PhusionPassenger.on_event(:stopping_worker_process) do
-				    if FileTest.exists?(@pid) then
-				      if File.open(@pid, "r") { |f| pid = f.read.to_i} == $$ then
+							File.open(@pid, "w") { |f| f.write($$) }
+							self.handle_plain
+						end
+					end
+
+					PhusionPassenger.on_event(:stopping_worker_process) do
+						if FileTest.exists?(@pid) then
+							if File.open(@pid, "r") { |f| pid = f.read.to_i} == $$ then
 								self.log("Stopped process with PID #{$$}", {:prefix => ["WORKER", "STOP"]})
-				        File.delete(@pid)
-				      end
-				    end
-				  end						
+								File.delete(@pid)
+							end
+						end
+					end
 				else
 					self.handle_plain
 				end
 			end
-			
+
 			def handle_plain
 				if !@rake_loaded then
 					@application.load_tasks
 					@rake_loaded = true
 				end
-				
+
 				@definitions.call(self)
-			end				
-			
-			def method_missing(method, *args, &block)  
+			end
+
+			def method_missing(method, *args, &block)
 				self.scheduler.send(method, *args, &block)
 			end
-     end
-   end
+		end
+	end
 end
