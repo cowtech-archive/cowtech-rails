@@ -46,21 +46,19 @@ module Cowtech
 						end
 					end
 
-					# OTTENIAMO GLI ARGOMENTI
+					# Get arguments and add reply-to
 					args = (args.is_a?(Hash) ? args : args[0]).delete_if { |k,v| v.blank? }
-
-					# AGGIUSTIAMO REPLY TO
 					args[:reply_to] = args[:from] if !args[:reply_to]
 
-					# OTTENIAMO IL BODY
+					# Get body
 					plain_body = args.delete(:body) || args.delete(:plain_body) || args.delete(:text_body) || args.delete(:plain_text) || args.delete(:text)
 					html_body = args.delete(:html_body) || args.delete(:html)
 
 					mail(args) do |format|
-						if plain_body then # SE C'E' PLAIN BODY
+						if plain_body then
 							format.text { render :text => plain_body }
 						end
-						if html_body then # SE C'E' HTML
+						if html_body then
 							format.html { render :text => html_body }
 						end
 					end

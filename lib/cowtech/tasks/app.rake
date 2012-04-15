@@ -102,11 +102,11 @@ namespace :css do
 	task :regenerate => :environment do |task|
 		puts "Regenerating CSS..."
 
-		if defined?(Less) then # MORE
+		if defined?(Less) then # More
 			puts "Using More"
 			Rake::Task["more:clean"].execute
 			Rake::Task["more:generate"].execute
-		elsif defined?(Sass) # SASS
+		elsif defined?(Sass) # Sass
 			Sass::Plugin.on_updating_stylesheet do |template, css|
 				puts "[SCSS] Compiling #{template} to #{css} ..."
 			end

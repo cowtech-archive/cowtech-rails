@@ -107,7 +107,7 @@ module Cowtech
 					search = "(@#{search}@)"
 					search.gsub!(/(\s+(AND|OR|NOT)\s+)/, "@) \\1 (@")
 
-					# SUBSTITUTE PARAMETERS
+					# Substitute parameters
 					i = -1
 					parameters = {}
 					search.gsub!(/@(.+?)@/) do |s|
@@ -146,18 +146,18 @@ module Cowtech
 
 					self.crud_query_add_condition(data, "(#{self.crud_get_class(data).table_name}.#{self.crud_get_class(data).deleted_column} IS NULL)", {}) if !data[:skip_deleted]
 
-					# GET QUERY
+					# Get query
 					args = params[parameter] if !args
 
 					if args.present? then
 						search, parameters = self.crud_query_parse_search(args)
 
-						# BUILD QUERY
+						# Build query
 						data[:query_params].merge!(parameters)
 						search_query = []
 						fields.each { |field| search_query << "(#{search.gsub("@FIELD@", "#{self.crud_get_class(data).table_name}.#{field.to_s}")})" }
 
-						# ADD OPTIONAL DATA
+						# Add optional data
 						if externals then
 							externals.each do |external|
 								external_query = ""
@@ -230,7 +230,7 @@ module Cowtech
 					sf = sort_by.split("-")
 					rv = OpenStruct.new({:what => mo["what"], :how => mo["how"].upcase})
 
-					# ADAPT SOME PARAMETERS
+					# Adapt some parameters
 					rv.what = "status_id" if rv.what == "status"
 
 					rv

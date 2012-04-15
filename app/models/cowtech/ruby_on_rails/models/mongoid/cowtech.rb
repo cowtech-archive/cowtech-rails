@@ -75,7 +75,7 @@ module Cowtech
           end
   
           module InstanceMethods
-            # Decommentare per ID di tipo numerico
+            # Decommentare for numeric type ids
             # def safe_id
             #   self.id ? self.id : 0
             # end

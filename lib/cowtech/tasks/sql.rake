@@ -80,11 +80,12 @@ module Cowtech
 
 			def self.backup(rake_args)
 				Cowtech::RubyOnRails::Scheduler.log "--- Backupping database ..."
-				# OTTENIAMO LA CONFIGURAZIONE
+
+				# Get configuration
 				db_config = YAML.load_file(Rails.root + "config/database.yml")
 				env = Rails.env
 
-				# ESEGUIAMO
+				# Execute
 				Cowtech::RubyOnRails::MysqlUtils.send("#{db_config[env]["adapter"]}_execute", db_config[env], rake_args)
 			end
 
