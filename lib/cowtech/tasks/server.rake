@@ -85,7 +85,7 @@ end
 namespace :server do
 	namespace :thin do
 		desc "Starts Thin server"
-		task :start, ["environment", "config"],  do |task, rake_args|
+		task :start, ["environment", "config"] do |task, rake_args|
 			Cowtech::RubyOnRails::ThinServer.start(rake_args.with_defaults("config" => Cowtech::RubyOnRails::ServerUtils.thin_path, "environment" => Cowtech::RubyOnRails::ServerUtils.default_environment))
 		end
 

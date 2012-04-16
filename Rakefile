@@ -19,6 +19,7 @@ Jeweler::Tasks.new do |gem|
 	gem.version = Cowtech::Rails::Version::STRING
 	gem.files = Dir["{lib}/**/*", "{app}/**/*", "{config}/**/*", "{rails}/**/*"]
 	gem.add_dependency "cowtech-extensions"
+	gem.required_ruby_version = ">= 1.9.2"
 end
 
 Jeweler::RubygemsDotOrgTasks.new

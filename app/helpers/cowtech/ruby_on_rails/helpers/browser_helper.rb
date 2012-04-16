@@ -9,7 +9,7 @@ module Cowtech
 		module Helpers
 			module BrowserHelper
 				def browser_detect
-					rv = {:engine => :unknown, :version => "0", :platform => :unknown, :agent => request.user_agent || request.env['HTTP_USER_AGENT'].try(:downcase) || ""}
+					rv = {engine: :unknown, version: "0", platform: :unknown, agent: request.user_agent || request.env["HTTP_USER_AGENT"].try(:downcase) || ""}
 
 					if rv[:agent].present? then
 						agent = rv[:agent].downcase

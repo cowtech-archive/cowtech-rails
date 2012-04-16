@@ -1,6 +1,3 @@
-.idea/
 pkg/
-.bundle/
-log/
-.project
-.settings/
+.idea/
+Gemfile.lock

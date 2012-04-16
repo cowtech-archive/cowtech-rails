@@ -70,7 +70,7 @@ namespace :app do
 	end
 
 	desc "Clears all Rails cache"
-	task :clear_cache => :environment do |task|
+	task clear_cache: :environment do |task|
 		Cowtech::RubyOnRails::AppUtils.clear_cache
 	end
 
@@ -99,7 +99,7 @@ end
 
 namespace :css do
 	desc "Regenerating CSS..."
-	task :regenerate => :environment do |task|
+	task regenerate: :environment do |task|
 		puts "Regenerating CSS..."
 
 		if defined?(Less) then # More

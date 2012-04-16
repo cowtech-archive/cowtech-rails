@@ -61,10 +61,10 @@ module Cowtech
 
 					mail(args) do |format|
 						if plain_body then
-							format.text { render :text => plain_body }
+							format.text { render text: plain_body }
 						end
 						if html_body then
-							format.html { render :text => html_body }
+							format.html { render text: html_body }
 						end
 					end
 				end

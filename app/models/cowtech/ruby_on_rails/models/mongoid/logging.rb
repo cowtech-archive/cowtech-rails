@@ -5,30 +5,30 @@
 #
 
 module Cowtech
-  module RubyOnRails
-    module Models
-      module Mongoid
-        module Logging
-          extend ActiveSupport::Concern
-    
-          included do
-            set_callback(:create, :after) { |d| d.log_activity(:create) }
-            set_callback(:update, :after) { |d| d.log_activity(:update) }    
-          end
-        
-          module InstanceMethods
-            def delete(options = {})
-              log_activity(:delete)
-              super(options)
-            end
+	module RubyOnRails
+		module Models
+			module Mongoid
+				module Logging
+					extend ActiveSupport::Concern
 
-            def restore
-              log_activity(:restore)
-              super
-            end
-          end    
-        end
-      end
-    end
-  end
+					included do
+						set_callback(:create, :after) { |d| d.log_activity(:create) }
+						set_callback(:update, :after) { |d| d.log_activity(:update) }
+					end
+
+					module InstanceMethods
+						def delete(options = {})
+							log_activity(:delete)
+							super(options)
+						end
+
+						def restore
+							log_activity(:restore)
+							super
+						end
+					end
+				end
+			end
+		end
+	end
 end

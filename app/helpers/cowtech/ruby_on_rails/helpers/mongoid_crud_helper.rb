@@ -21,8 +21,8 @@ module Cowtech
 					@mongo_class = @mongo_class.constantize if @mongo_class.is_a?(String)
 					@mongo_records = []
 					@mongo_sort_order = [[:_id, :asc]]
-					@mongo_bounds = {:total => 0, :first => 1, :last => 0, :pages => 1, :page => 1, :per_page => 1}
-					@mongo_query = self.mongo_reset_query(:also_deleted => args[:also_deleted]) if @mongo_class
+					@mongo_bounds = {total: 0, first: 1, last: 0, pages: 1, page: 1, per_page: 1}
+					@mongo_query = self.mongo_reset_query(also_deleted: args[:also_deleted]) if @mongo_class
 				end
 
 				def mongo_has_data?(args = {})
@@ -36,12 +36,12 @@ module Cowtech
 						@mongo_bounds[:pages] = (@mongo_bounds[:total].to_f / @mongo_bounds[:per_page]).ceil
 
 						if @mongo_bounds[:per_page] > 0 then
-							@mongo_bounds[:page] = self.mongo_get_page_param(:upperbound => @mongo_bounds[:pages])
+							@mongo_bounds[:page] = self.mongo_get_page_param(upperbound: @mongo_bounds[:pages])
 							base = ((@mongo_bounds[:page] - 1) * @mongo_bounds[:per_page])
 							@mongo_bounds[:first] = base + 1
 							@mongo_bounds[:last] = [base + @mongo_bounds[:per_page], @mongo_bounds[:total]].min
 						else
-							@mongo_bounds.merge!(:pages => 1, :page => 1, :first => 1, :last => @mongo_bounds[:total], :per_page => @mongo_bounds[:total])
+							@mongo_bounds.merge!(pages: 1, page: 1, first: 1, last: @mongo_bounds[:total], per_page: @mongo_bounds[:total])
 						end
 					end
 
@@ -50,7 +50,7 @@ module Cowtech
 
 				def mongo_fetch_data(args = {})
 					@mongo_records = @mongo_query.order_by(@mongo_sort_order)
-					self.mongo_calculate_bounds(args.reverse_merge(:per_page => (args[:per_page] || @mongo_per_page || params[args[:parameter] || :count])))
+					self.mongo_calculate_bounds(args.reverse_merge(per_page: (args[:per_page] || @mongo_per_page || params[args[:parameter] || :count])))
 					@records = @mongo_records.skip(@mongo_bounds[:first] - 1).limit(@mongo_bounds[:per_page])
 					@mongo_pager = WillPaginate::Collection.new(@mongo_bounds[:page], @mongo_bounds[:per_page], @mongo_bounds[:total])
 				end
@@ -69,7 +69,7 @@ module Cowtech
 						if condition.is_a?(Hash) then
 							condition.each_pair do |key, val|
 								if key == "$or" then
-									@mongo_query = @mongo_query.any_of(val) # TODO: This don't work as expected. See: https://github.com/mongoid/mongoid/issues/569
+									@mongo_query = @mongo_query.any_of(val) # TODO: This doesn't work as expected. See: https://github.com/mongoid/mongoid/issues/569
 								else
 									@mongo_query = @mongo_query.where({key => val})
 								end
@@ -149,7 +149,7 @@ module Cowtech
 					order = args[:order] || [:current, [:updated_at, :desc]]
 
 					# Get current request sort order and then replace it into the sort fields
-					current = self.mongo_get_sort_param(:default => args[:default])
+					current = self.mongo_get_sort_param(default: args[:default])
 					current_index = order.index(:current)
 					order[current_index] = current if current_index
 

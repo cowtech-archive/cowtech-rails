@@ -68,7 +68,7 @@ module Cowtech
 				(ActiveRecord::Base.connection.tables - skip_tables).each do |table_name|
 					Cowtech::RubyOnRails::Scheduler.log "--- --- Dumping table #{table_name} ..."
 					i = "01"
-					File.open("#{RAILS_ROOT}/test/fixture/#{table_name}.yml", 'w') do |file|
+					File.open("#{RAILS_ROOT}/test/fixture/#{table_name}.yml", "w") do |file|
 						data = ActiveRecord::Base.connection.select_all(sql % table_name)
 						file.write data.inject({}) { |hash, record|
 							hash["#{table_name}_#{i.succ!}"] = record
@@ -104,8 +104,8 @@ module Cowtech
 end
 
 namespace :mysql do
-	desc 'Converting data to fixtures'
-	task :to_fixtures => :environment do
+	desc "Converting data to fixtures"
+	task to_fixtures: :environment do
 		Cowtech::RubyOnRails::SqlUtils.to_fixtures
 	end
 

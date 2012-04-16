@@ -35,7 +35,7 @@ module Cowtech
 
 					def random
 						c = self.count
-						c != 0 ? self.find(:first, :offset => rand(c)) : nil
+						c != 0 ? self.find(:first, offset: rand(c)) : nil
 					end
 
 					def per_page

@@ -68,7 +68,7 @@ module Cowtech
 					data = self.crud_get_data if !data
 					records = self.crud_get_records(data) if !records
 					self.crud_calculate_data_bounds(data, records, per_page || params[parameter])
-					data[:pager_data] = records.paginate(:page => data[:data_bounds].page, :per_page => data[:data_bounds].per_page, :total_entries => data[:data_bounds].total) if records.respond_to?(:paginate)
+					data[:pager_data] = records.paginate(page: data[:data_bounds].page, per_page: data[:data_bounds].per_page, total_entries: data[:data_bounds].total) if records.respond_to?(:paginate)
 				end
 
 				def crud_query_initialize(data = nil, force = false)
@@ -228,7 +228,7 @@ module Cowtech
 					mo = /^(?<what>[a-z0-9_]+)-(?<how>asc|desc)$/i.match(default) if !mo || !((valids || []).include?(mo["what"]))
 
 					sf = sort_by.split("-")
-					rv = OpenStruct.new({:what => mo["what"], :how => mo["how"].upcase})
+					rv = OpenStruct.new({what: mo["what"], how: mo["how"].upcase})
 
 					# Adapt some parameters
 					rv.what = "status_id" if rv.what == "status"
@@ -239,7 +239,7 @@ module Cowtech
 				def crud_calculate_data_bounds(data, records = nil, per_page = nil)
 					data = self.crud_get_data if !data
 					records = data[:records] if !records
-					bounds = OpenStruct.new({:total => 0, :first => 0, :last => 0, :pages => 0, :page => 1, :per_page => 1})
+					bounds = OpenStruct.new({total: 0, first: 0, last: 0, pages: 0, page: 1, per_page: 1})
 
 					if records != nil && records.count > 0 then
 						per_page = (per_page.is_valid_integer? ? per_page : records[0].class.per_page).to_integer

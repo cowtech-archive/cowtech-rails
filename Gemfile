@@ -4,4 +4,6 @@
 # Licensed under the MIT license, which can be found at http://www.opensource.org/licenses/mit-license.php.
 #
 
-require "cowtech"
+source "http://rubygems.org"
+
+gem "jeweler"

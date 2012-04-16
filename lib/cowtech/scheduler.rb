@@ -56,27 +56,27 @@ module Cowtech
 					task = Rake::Task[name]
 					values = task.arg_names.collect { |a| args[a.to_sym] }
 
-					self.log(label + args_string + " ...", {:prefix => ["RAKE", "START", name]})
+					self.log(label + args_string + " ...", {prefix: ["RAKE", "START", name]})
 					task.reenable
 					task.invoke(*values)
-					self.log("Rake task ended.", {:prefix => ["RAKE", "END", name]})
+					self.log("Rake task ended.", {prefix: ["RAKE", "END", name]})
 				rescue Exception => e
-					self.log("Rake task failed with exception: [#{e.class.to_s}] #{e.to_s}.", {:prefix => ["RAKE", "ERROR", name]})
+					self.log("Rake task failed with exception: [#{e.class.to_s}] #{e.to_s}.", {prefix: ["RAKE", "ERROR", name]})
 				end
 			end
 
 			def execute_inline_task(label, name)
 				begin
-					self.log(label + " ...", {:prefix => ["INLINE", "START", name]})
+					self.log(label + " ...", {prefix: ["INLINE", "START", name]})
 					yield if block_given?
-					self.log("Inline task ended.", {:prefix => ["INLINE", "END", name]})
+					self.log("Inline task ended.", {prefix: ["INLINE", "END", name]})
 				rescue Exception => e
-					self.log("Inline task failed with exception: [#{e.class.to_s}] #{e.to_s}.", {:prefix => ["RAKE", "ERROR", name]})
+					self.log("Inline task failed with exception: [#{e.class.to_s}] #{e.to_s}.", {prefix: ["RAKE", "ERROR", name]})
 				end
 			end
 
 			def execute
-				self.log("Scheduler started.", {:prefix => "MAIN"})
+				self.log("Scheduler started.", {prefix: "MAIN"})
 				self.handle_plain
 			end
 
@@ -86,7 +86,7 @@ module Cowtech
 
 					PhusionPassenger.on_event(:starting_worker_process) do |forked|
 						if forked && !FileTest.exists?(@pid) then
-							self.log("Starting process with PID #{$$}", {:prefix => ["WORKER", "START"]})
+							self.log("Starting process with PID #{$$}", {prefix: ["WORKER", "START"]})
 							File.open(@pid, "w") { |f| f.write($$) }
 							self.handle_plain
 						end
@@ -95,7 +95,7 @@ module Cowtech
 					PhusionPassenger.on_event(:stopping_worker_process) do
 						if FileTest.exists?(@pid) then
 							if File.open(@pid, "r") { |f| pid = f.read.to_i} == $$ then
-								self.log("Stopped process with PID #{$$}", {:prefix => ["WORKER", "STOP"]})
+								self.log("Stopped process with PID #{$$}", {prefix: ["WORKER", "STOP"]})
 								File.delete(@pid)
 							end
 						end
