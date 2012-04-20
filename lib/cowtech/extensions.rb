@@ -4,9 +4,11 @@
 # Licensed under the MIT license, which can be found at http://www.opensource.org/licenses/mit-license.php.
 #
 
-module SubdomainFu
-	def self.override_only_path?
-		true
+if defined?(SubdomainFu) then
+	module SubdomainFu
+		def self.override_only_path?
+			true
+		end
 	end
 end
 

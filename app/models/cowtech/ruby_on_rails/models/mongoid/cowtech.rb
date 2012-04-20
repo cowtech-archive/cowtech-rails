@@ -74,36 +74,29 @@ module Cowtech
 						end
 					end
 
-					module InstanceMethods
-						# Decommentare for numeric type ids
-						# def safe_id
-						#   self.id ? self.id : 0
-						# end
+					def editable?(user = nil)
+						true
+					end
 
-						def editable?(user = nil)
-							true
-						end
+					def deletable?(user = nil)
+						true
+					end
 
-						def deletable?(user = nil)
-							true
-						end
-
-						def delete(definitive = false)
-							if definitive != true then
-								if self.deletable? then
-									super()
-									true
-								else
-									false
-								end
+					def delete(definitive = false)
+						if definitive != true then
+							if self.deletable? then
+								super()
+								true
 							else
-								self.delete!
+								false
 							end
+						else
+							self.delete!
 						end
+					end
 
-						def is?(other)
-							other ? (self.id == self.class.__safe_index_find(other).id) : false
-						end
+					def is?(other)
+						other ? (self.id == self.class.__safe_index_find(other).id) : false
 					end
 				end
 			end

@@ -16,16 +16,14 @@ module Cowtech
 						set_callback(:update, :after) { |d| d.log_activity(:update) }
 					end
 
-					module InstanceMethods
-						def delete(options = {})
-							log_activity(:delete)
-							super(options)
-						end
+					def delete(options = {})
+						log_activity(:delete)
+						super(options)
+					end
 
-						def restore
-							log_activity(:restore)
-							super
-						end
+					def restore
+						log_activity(:restore)
+						super
 					end
 				end
 			end
