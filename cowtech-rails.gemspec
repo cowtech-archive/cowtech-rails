@@ -22,11 +22,11 @@ Gem::Specification.new do |s|
 	s.require_paths = ["lib"]
 
 	s.required_ruby_version = ">= 1.9.2"
-	s.add_dependency("actionmailer", ">= 3.2.0")
-	s.add_dependency("actionpack", ">= 3.2.0")
-	s.add_dependency("activerecord", ">= 3.2.0")
-	s.add_dependency("bson_ext", ">= 1.5.0")
-	s.add_dependency("cowtech-extensions", ">= 1.4.0")
-	s.add_dependency("mongoid", ">= 2.4.0")
-	s.add_dependency("rake", ">= 0.9.0")
+	s.add_dependency("actionmailer", "~> 3.0")
+	s.add_dependency("actionpack", "~> 3.0")
+	s.add_dependency("activerecord", "~> 3.0")
+	s.add_dependency("bson_ext", "~> 1.0")
+	s.add_dependency("cowtech-extensions", "~> 1.4.0")
+	s.add_dependency("mongoid", "~> 2.0")
+	s.add_dependency("rake", "~> 0.9.0")
 end
