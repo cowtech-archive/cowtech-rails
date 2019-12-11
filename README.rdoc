@@ -1,7 +1,8 @@
 = cowtech-rails
 
+== END OF DEVELOPMENT NOTICE - This gem has been discontinued
+
 General purpose Ruby on Rails library.
-http://github.com/ShogunPanda/cowtech-rails
 
 == Contributing to cowtech-rails
 
